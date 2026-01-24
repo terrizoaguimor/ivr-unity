@@ -1,9 +1,10 @@
 /**
  * IVR Unity Financial - Configuration
- * Replace 'TU_API_KEY_AQUI' with your ElevenLabs API key
+ * API Key is injected via environment variable at build time
  */
 const ELEVENLABS_CONFIG = {
-  apiKey: 'sk_dd91fb09de472750ce3e99df73978cdff4f2614f7d6c1cd9',
+  // API Key loaded from environment or localStorage
+  apiKey: window.ELEVENLABS_API_KEY || '',
 
   // Voice IDs from ElevenLabs
   voices: {

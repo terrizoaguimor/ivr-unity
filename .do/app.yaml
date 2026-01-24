@@ -19,3 +19,16 @@ services:
       timeout_seconds: 3
       success_threshold: 1
       failure_threshold: 3
+    envs:
+      - key: ELEVENLABS_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+        value: "sk_dd91fb09de472750ce3e99df73978cdff4f2614f7d6c1cd9"
+      - key: HTPASSWD_USER
+        scope: RUN_TIME
+        type: SECRET
+        value: "unity"
+      - key: HTPASSWD_PASS
+        scope: RUN_TIME
+        type: SECRET
+        value: "UnityIVR2024!"
