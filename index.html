@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IVR Unity Financial - Simulador Didáctico</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>Unity Financial IVR</h1>
+      <p class="subtitle">Simulador de Entrenamiento</p>
+    </header>
+
+    <div class="main-content">
+      <!-- Phone Interface -->
+      <div class="phone-container">
+        <div class="phone">
+          <!-- Phone Header -->
+          <div class="phone-header">
+            <div class="phone-speaker"></div>
+            <div class="phone-brand">Unity Line</div>
+          </div>
+
+          <!-- LCD Screen -->
+          <div class="phone-screen">
+            <div class="screen-header">
+              <span class="signal-icon">📶</span>
+              <span class="time" id="currentTime">00:00</span>
+              <span class="battery-icon">🔋</span>
+            </div>
+            <div class="screen-content">
+              <div class="call-status" id="callStatus">
+                <span class="status-icon">📞</span>
+                <span class="status-text">Listo para llamar</span>
+              </div>
+              <div class="menu-display" id="menuDisplay">
+                <p class="welcome-text">Presione <strong>Llamar</strong> para iniciar</p>
+              </div>
+              <div class="call-timer" id="callTimer" style="display: none;">
+                <span class="timer-icon">⏱️</span>
+                <span class="timer-text">00:00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Numeric Keypad -->
+          <div class="keypad">
+            <button class="key" data-key="1">
+              <span class="key-number">1</span>
+              <span class="key-letters"></span>
+            </button>
+            <button class="key" data-key="2">
+              <span class="key-number">2</span>
+              <span class="key-letters">ABC</span>
+            </button>
+            <button class="key" data-key="3">
+              <span class="key-number">3</span>
+              <span class="key-letters">DEF</span>
+            </button>
+            <button class="key" data-key="4">
+              <span class="key-number">4</span>
+              <span class="key-letters">GHI</span>
+            </button>
+            <button class="key" data-key="5">
+              <span class="key-number">5</span>
+              <span class="key-letters">JKL</span>
+            </button>
+            <button class="key" data-key="6">
+              <span class="key-number">6</span>
+              <span class="key-letters">MNO</span>
+            </button>
+            <button class="key" data-key="7">
+              <span class="key-number">7</span>
+              <span class="key-letters">PQRS</span>
+            </button>
+            <button class="key" data-key="8">
+              <span class="key-number">8</span>
+              <span class="key-letters">TUV</span>
+            </button>
+            <button class="key" data-key="9">
+              <span class="key-number">9</span>
+              <span class="key-letters">WXYZ</span>
+            </button>
+            <button class="key key-star" data-key="*">
+              <span class="key-number">✱</span>
+              <span class="key-letters"></span>
+            </button>
+            <button class="key" data-key="0">
+              <span class="key-number">0</span>
+              <span class="key-letters">+</span>
+            </button>
+            <button class="key key-hash" data-key="#">
+              <span class="key-number">#</span>
+              <span class="key-letters"></span>
+            </button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="btn btn-call" id="btnCall">
+              <span class="btn-icon">📞</span>
+              <span class="btn-text">Llamar</span>
+            </button>
+            <button class="btn btn-hangup" id="btnHangup" disabled>
+              <span class="btn-icon">📴</span>
+              <span class="btn-text">Colgar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Side Panel -->
+      <div class="side-panel">
+        <!-- Transcript Panel -->
+        <div class="panel transcript-panel">
+          <div class="panel-header">
+            <h3>📝 Transcript</h3>
+            <button class="btn-small" id="btnClearTranscript">Limpiar</button>
+          </div>
+          <div class="panel-content" id="transcriptContent">
+            <p class="placeholder-text">El transcript aparecerá aquí durante la llamada...</p>
+          </div>
+        </div>
+
+        <!-- Navigation History -->
+        <div class="panel history-panel">
+          <div class="panel-header">
+            <h3>🗺️ Navegación</h3>
+          </div>
+          <div class="panel-content" id="navigationHistory">
+            <div class="nav-tree">
+              <div class="nav-node start">
+                <span class="node-icon">🏠</span>
+                <span class="node-text">Inicio</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Debug Panel -->
+        <div class="panel debug-panel">
+          <div class="panel-header">
+            <h3>🔧 Estado del Sistema</h3>
+            <label class="toggle-label">
+              <input type="checkbox" id="toggleDebug">
+              <span>Mostrar</span>
+            </label>
+          </div>
+          <div class="panel-content debug-content" id="debugContent" style="display: none;">
+            <div class="debug-item">
+              <span class="debug-label">Estado actual:</span>
+              <span class="debug-value" id="debugState">IDLE</span>
+            </div>
+            <div class="debug-item">
+              <span class="debug-label">Nodo IVR:</span>
+              <span class="debug-value" id="debugNode">-</span>
+            </div>
+            <div class="debug-item">
+              <span class="debug-label">Última tecla:</span>
+              <span class="debug-value" id="debugLastKey">-</span>
+            </div>
+            <div class="debug-item">
+              <span class="debug-label">Reintentos:</span>
+              <span class="debug-value" id="debugRetries">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="panel controls-panel">
+          <div class="panel-header">
+            <h3>⚙️ Controles</h3>
+          </div>
+          <div class="panel-content">
+            <div class="control-group">
+              <label class="toggle-label">
+                <input type="checkbox" id="toggleTrainingMode">
+                <span>Modo Entrenamiento (más lento)</span>
+              </label>
+            </div>
+            <div class="control-group">
+              <button class="btn btn-secondary" id="btnReset">
+                🔄 Reiniciar Simulador
+              </button>
+            </div>
+            <div class="control-group api-key-group">
+              <label for="apiKeyInput">API Key ElevenLabs:</label>
+              <div class="input-group">
+                <input type="password" id="apiKeyInput" placeholder="Ingrese su API key">
+                <button class="btn-small" id="btnToggleKey">👁️</button>
+              </div>
+              <button class="btn btn-primary btn-small" id="btnSaveKey">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Unity Financial IVR Simulator - Herramienta de Entrenamiento</p>
+      <p class="footer-note">Powered by ElevenLabs TTS</p>
+    </footer>
+  </div>
+
+  <!-- Audio element for TTS playback -->
+  <audio id="audioPlayer" style="display: none;"></audio>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script src="js/ivr-flow.js"></script>
+  <script src="js/audio-manager.js"></script>
+  <script src="js/elevenlabs.js"></script>
+  <script src="js/ivr-engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
