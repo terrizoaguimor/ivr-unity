@@ -3,14 +3,36 @@
 
 ---
 
+## Índice
+
+1. [Acceso al Sistema](#1-acceso-al-sistema)
+2. [Herramientas Disponibles](#2-herramientas-disponibles)
+3. [Interfaz del Simulador](#3-interfaz-del-simulador)
+4. [Cómo Iniciar una Llamada](#4-cómo-iniciar-una-llamada)
+5. [Navegación del Menú Principal](#5-navegación-del-menú-principal-español)
+6. [Submenús por Línea de Negocio](#6-submenús-por-línea-de-negocio)
+7. [Diagrama de Flujo Interactivo](#7-diagrama-de-flujo-interactivo)
+8. [Controles del Simulador](#8-controles-del-simulador)
+9. [Ejemplos Prácticos](#9-ejemplos-prácticos)
+10. [Horarios de Atención](#10-horarios-de-atención-por-cola)
+11. [Uso del Teclado Físico](#11-uso-del-teclado-físico)
+12. [Solución de Problemas](#12-solución-de-problemas)
+13. [Mejores Prácticas](#13-mejores-prácticas-para-entrenamiento)
+14. [Información Técnica](#14-información-técnica)
+
+---
+
 ## 1. Acceso al Sistema
 
-### URL del Simulador
-```
-https://ivr-unity-a6zp5.ondigitalocean.app
-```
+### URLs del Sistema
+
+| Herramienta | URL |
+|-------------|-----|
+| **Simulador IVR** | https://ivr-unity-a6zp5.ondigitalocean.app |
+| **Diagrama de Flujo** | https://ivr-unity-a6zp5.ondigitalocean.app/diagrama.html |
 
 ### Credenciales de Acceso
+
 Cuando el navegador solicite autenticación:
 
 | Campo | Valor |
@@ -18,9 +40,38 @@ Cuando el navegador solicite autenticación:
 | **Usuario** | `unity` |
 | **Contraseña** | `UnityIVR2024!` |
 
+> **Nota:** El sistema de voz (TTS) ya está configurado y listo para usar. No necesitas ingresar ningún API key.
+
 ---
 
-## 2. Interfaz del Simulador
+## 2. Herramientas Disponibles
+
+El sistema cuenta con dos herramientas principales:
+
+### 2.1 Simulador IVR (Página Principal)
+
+Un teléfono virtual interactivo que simula la experiencia completa del cliente llamando al IVR de Unity Financial.
+
+**Características:**
+- Teléfono virtual con teclado numérico
+- Voces realistas generadas por inteligencia artificial
+- Panel de transcript en tiempo real
+- Historial de navegación visual
+- Modo entrenamiento con pausas extendidas
+
+### 2.2 Diagrama de Flujo Interactivo
+
+Una visualización gráfica de todo el árbol IVR donde puedes hacer clic en cualquier nodo para escuchar el mensaje correspondiente.
+
+**Características:**
+- Vista completa del árbol de decisiones
+- Código de colores por línea de negocio
+- Clic para escuchar cualquier mensaje
+- Muestra las colas de destino (VQ)
+
+---
+
+## 3. Interfaz del Simulador
 
 Al ingresar verás una interfaz de teléfono virtual con los siguientes elementos:
 
@@ -56,14 +107,15 @@ Al ingresar verás una interfaz de teléfono virtual con los siguientes elemento
 
 | Panel | Función |
 |-------|---------|
+| **✅ Sistema TTS** | Indicador de que el sistema de voz está configurado y listo |
 | **📝 Transcript** | Muestra el texto de cada mensaje TTS y las teclas presionadas |
 | **🗺️ Navegación** | Visualiza el recorrido por el árbol IVR |
-| **🔧 Estado del Sistema** | Información técnica para depuración |
-| **⚙️ Controles** | Modo entrenamiento y configuración |
+| **🔧 Estado del Sistema** | Información técnica para depuración (opcional) |
+| **⚙️ Controles** | Modo entrenamiento y reinicio del simulador |
 
 ---
 
-## 3. Cómo Iniciar una Llamada
+## 4. Cómo Iniciar una Llamada
 
 ### Paso 1: Hacer clic en "Llamar"
 - Presiona el botón verde **📞 Llamar**
@@ -82,7 +134,7 @@ Para español, marque dos."
 
 ---
 
-## 4. Navegación del Menú Principal (Español)
+## 5. Navegación del Menú Principal (Español)
 
 Después de presionar **2**, escucharás:
 
@@ -111,9 +163,9 @@ Presione:
 
 ---
 
-## 5. Submenús por Línea de Negocio
+## 6. Submenús por Línea de Negocio
 
-### 5.1 Menú SALUD (Tecla 1)
+### 6.1 Menú SALUD (Tecla 1)
 
 ```
 "Usted ha llegado a nuestro equipo de Salud.
@@ -137,7 +189,7 @@ Presione:
 
 ---
 
-### 5.2 Menú VIDA (Tecla 2)
+### 6.2 Menú VIDA (Tecla 2)
 
 ```
 "Usted ha llegado a nuestro equipo de Vida.
@@ -161,7 +213,7 @@ Presione:
 
 ---
 
-### 5.3 Menú P&C - Propiedad y Accidentes (Tecla 3)
+### 6.3 Menú P&C - Propiedad y Accidentes (Tecla 3)
 
 ```
 "Usted ha llegado a nuestro equipo de P&C.
@@ -185,7 +237,7 @@ Presione:
 
 ---
 
-### 5.4 Menú PQRS (Tecla 4)
+### 6.4 Menú PQRS (Tecla 4)
 
 ```
 "Ha seleccionado PQRS y trámites.
@@ -205,7 +257,34 @@ Presione:
 
 ---
 
-## 6. Controles del Simulador
+## 7. Diagrama de Flujo Interactivo
+
+### Cómo Usar el Diagrama
+
+1. **Accede a:** https://ivr-unity-a6zp5.ondigitalocean.app/diagrama.html
+2. **Ingresa** las credenciales (unity / UnityIVR2024!)
+3. **Haz clic** en cualquier nodo del diagrama para escuchar el mensaje
+
+### Código de Colores
+
+| Color | Línea de Negocio |
+|-------|------------------|
+| 🟢 Verde | Salud |
+| 🟣 Morado | Vida |
+| 🟠 Naranja | P&C (Propiedad y Accidentes) |
+| 🔵 Azul | PQRS |
+| 🔴 Rojo (borde punteado) | Transferencia a agente |
+
+### Utilidad del Diagrama
+
+- **Supervisores:** Explicar el flujo completo a nuevos agentes
+- **Agentes:** Repasar mensajes específicos sin navegar todo el IVR
+- **QA:** Verificar que los mensajes son correctos
+- **Entrenamiento:** Escuchar ejemplos de cada interacción
+
+---
+
+## 8. Controles del Simulador
 
 ### Durante la Llamada
 
@@ -222,16 +301,16 @@ Presione:
 |---------|---------|
 | **Modo Entrenamiento** | Activa pausas más largas entre mensajes |
 | **Reiniciar Simulador** | Vuelve al estado inicial |
-| **API Key** | Campo para ingresar/cambiar el API key de ElevenLabs |
 
 ---
 
-## 7. Flujo de Ejemplo: Cotización de Seguro de Salud
+## 9. Ejemplos Prácticos
 
-### Escenario
-Un cliente nuevo quiere cotizar un seguro de salud.
+### Ejemplo 1: Cotización de Seguro de Salud
 
-### Pasos
+**Escenario:** Un cliente nuevo quiere cotizar un seguro de salud.
+
+**Pasos:**
 
 1. **Clic en "Llamar"**
    - Escucha: "Welcome to Unity Line..."
@@ -243,38 +322,63 @@ Un cliente nuevo quiere cotizar un seguro de salud.
    - Escucha: "Usted ha llegado a nuestro equipo de Salud..."
 
 4. **Presiona 1** (Cotización)
-   - Escucha: "Ha seleccionado cotización o afiliación de salud. En un momento le transferiremos con un asesor especializado..."
+   - Escucha: "Ha seleccionado cotización o afiliación de salud..."
    - **Transferencia a VQ_SALUD_VENTAS**
 
-### Visualización en Panel de Navegación
-```
-🏠 Inicio
-  └── 📋 MAIN_MENU_ES
-        └── 🏥 MENU_SALUD
-              └── 📝 SALUD_COTIZACION ✓
-```
+**Ruta rápida:** `Llamar → 2 → 1 → 1`
 
 ---
 
-## 8. Flujo de Ejemplo: Reportar un Siniestro de Auto
+### Ejemplo 2: Reportar un Siniestro de Auto
 
-### Escenario
-Un cliente tuvo un accidente automovilístico.
+**Escenario:** Un cliente tuvo un accidente automovilístico.
 
-### Pasos
+**Pasos:**
 
-1. **Clic en "Llamar"** → Presiona **2** (Español)
+1. **Clic en "Llamar"** → **Presiona 2** (Español)
 
 2. **Presiona 3** (P&C - Propiedad y Accidentes)
    - Escucha: "Usted ha llegado a nuestro equipo de P&C..."
 
 3. **Presiona 4** (Reportar Siniestro)
-   - Escucha: "Ha seleccionado reportar un siniestro. Es importante que tenga a mano los detalles del incidente. Un ajustador de nuestra línea 24/7 le atenderá de inmediato."
+   - Escucha: "Ha seleccionado reportar un siniestro. Es importante que tenga a mano los detalles del incidente..."
    - **Transferencia URGENTE a VQ_PYC_SINIESTRO** 🚨
+
+**Ruta rápida:** `Llamar → 2 → 3 → 4`
 
 ---
 
-## 9. Horarios de Atención por Cola
+### Ejemplo 3: Cambiar Beneficiario de Seguro de Vida
+
+**Escenario:** Un cliente quiere actualizar el beneficiario de su póliza de vida.
+
+**Pasos:**
+
+1. **Llamar → 2** (Español)
+2. **Presiona 2** (Vida)
+3. **Presiona 2** (Cambiar beneficiario)
+   - **Transferencia a VQ_VIDA_SERVICIO**
+
+**Ruta rápida:** `Llamar → 2 → 2 → 2`
+
+---
+
+### Ejemplo 4: Presentar una Queja
+
+**Escenario:** Un cliente insatisfecho quiere presentar una queja formal.
+
+**Pasos:**
+
+1. **Llamar → 2** (Español)
+2. **Presiona 4** (PQRS)
+3. **Presiona 1** (Queja/Reclamación)
+   - **Transferencia a VQ_PQRS_GENERAL**
+
+**Ruta rápida:** `Llamar → 2 → 4 → 1`
+
+---
+
+## 10. Horarios de Atención por Cola
 
 | Cola | Horario |
 |------|---------|
@@ -288,7 +392,7 @@ Un cliente tuvo un accidente automovilístico.
 
 ---
 
-## 10. Uso del Teclado Físico
+## 11. Uso del Teclado Físico
 
 Puedes usar el teclado de tu computadora durante la llamada:
 
@@ -301,65 +405,71 @@ Puedes usar el teclado de tu computadora durante la llamada:
 
 ---
 
-## 11. Panel de Transcript
-
-El panel de transcript muestra en tiempo real:
-
-```
-[17:45:23] 🔊 Welcome to Unity Line — Great Deals...
-[17:45:28] 👤 Tecla presionada: 2
-[17:45:29] 🔊 Bienvenido a su aseguradora...
-[17:45:45] 👤 Tecla presionada: 1
-[17:45:46] 🔊 Usted ha llegado a nuestro equipo de Salud...
-```
-
-Útil para:
-- Verificar que el TTS reprodujo correctamente el mensaje
-- Revisar la secuencia de teclas presionadas
-- Documentar escenarios de prueba
-
----
-
 ## 12. Solución de Problemas
 
 ### El audio no se reproduce
-1. Verifica que el navegador tenga permiso para reproducir audio
-2. Revisa que el volumen del sistema no esté en silencio
-3. Comprueba que el API key de ElevenLabs esté configurado
+
+1. ✅ Verifica que el navegador tenga permiso para reproducir audio
+2. ✅ Revisa que el volumen del sistema no esté en silencio
+3. ✅ Asegúrate de ver el indicador verde "Sistema TTS configurado y listo"
+4. ✅ Prueba refrescando la página (F5)
 
 ### El simulador no responde a las teclas
-1. Asegúrate de que la llamada esté activa (botón "Colgar" habilitado)
-2. Espera a que termine el audio actual o presiónalo para interrumpir
-3. Intenta hacer clic directamente en el teclado virtual
 
-### Error al generar audio
-1. Verifica la conexión a internet
-2. El API key de ElevenLabs puede haber expirado o tener límite
-3. Revisa la consola del navegador (F12) para más detalles
+1. ✅ Asegúrate de que la llamada esté activa (botón "Colgar" habilitado)
+2. ✅ Espera a que termine el audio actual o presiona una tecla para interrumpir
+3. ✅ Intenta hacer clic directamente en el teclado virtual
+
+### La página no carga
+
+1. ✅ Verifica que ingresaste las credenciales correctas (unity / UnityIVR2024!)
+2. ✅ Intenta en modo incógnito del navegador
+3. ✅ Limpia la caché del navegador
+
+### El diagrama no reproduce audio
+
+1. ✅ Verifica que el indicador muestre "Sistema TTS configurado y listo"
+2. ✅ Haz clic directamente sobre el nodo, no en el texto
+3. ✅ Espera a que termine un audio antes de reproducir otro
 
 ---
 
 ## 13. Mejores Prácticas para Entrenamiento
 
 ### Para Supervisores
-1. Activa el **Modo Entrenamiento** para pausas más largas
-2. Usa el **Panel de Navegación** para explicar el árbol IVR
-3. Revisa el **Transcript** después de cada ejercicio
+
+1. ✅ Activa el **Modo Entrenamiento** para pausas más largas
+2. ✅ Usa el **Diagrama de Flujo** para explicar el árbol IVR visualmente
+3. ✅ Revisa el **Panel de Transcript** después de cada ejercicio
+4. ✅ Asigna rutas específicas a cada agente según su línea de negocio
 
 ### Para Agentes Nuevos
-1. Practica cada ruta del menú al menos 3 veces
-2. Memoriza las opciones numéricas de tu línea de negocio
-3. Familiarízate con las transferencias a otras colas
+
+1. ✅ Practica cada ruta del menú al menos 3 veces
+2. ✅ Memoriza las opciones numéricas de tu línea de negocio
+3. ✅ Familiarízate con las transferencias a otras colas
+4. ✅ Usa el diagrama para repasar los mensajes
 
 ### Ejercicios Sugeridos
 
-| Ejercicio | Ruta |
-|-----------|------|
-| Cotización Salud | 2 → 1 → 1 |
-| Autorización médica | 2 → 1 → 2 |
-| Siniestro auto urgente | 2 → 3 → 4 |
-| Queja de cliente | 2 → 4 → 1 |
-| Cambio de beneficiario vida | 2 → 2 → 2 |
+| Ejercicio | Ruta | Cola Destino |
+|-----------|------|--------------|
+| Cotización Salud | 2 → 1 → 1 | VQ_SALUD_VENTAS |
+| Autorización médica | 2 → 1 → 2 | VQ_SALUD_SERVICIO |
+| Contratar seguro de vida | 2 → 2 → 1 | VQ_VIDA_VENTAS |
+| Cambio de beneficiario | 2 → 2 → 2 | VQ_VIDA_SERVICIO |
+| Cotización auto/hogar | 2 → 3 → 1 | VQ_PYC_VENTAS |
+| Siniestro auto urgente | 2 → 3 → 4 | VQ_PYC_SINIESTRO 🚨 |
+| Queja de cliente | 2 → 4 → 1 | VQ_PQRS_GENERAL |
+| Siniestro urgente general | 2 → 4 → 3 | VQ_SINIESTRO_URGENTE 🚨 |
+
+### Checklist de Competencias
+
+- [ ] Conoce el mensaje de bienvenida completo
+- [ ] Puede navegar al menú de su línea de negocio
+- [ ] Identifica cuándo transferir a siniestros urgentes
+- [ ] Sabe usar la tecla * para volver atrás
+- [ ] Puede explicar las opciones al cliente si pregunta
 
 ---
 
@@ -367,21 +477,37 @@ El panel de transcript muestra en tiempo real:
 
 | Elemento | Valor |
 |----------|-------|
-| **URL** | https://ivr-unity-a6zp5.ondigitalocean.app |
+| **URL Simulador** | https://ivr-unity-a6zp5.ondigitalocean.app |
+| **URL Diagrama** | https://ivr-unity-a6zp5.ondigitalocean.app/diagrama.html |
 | **Plataforma** | DigitalOcean App Platform |
 | **TTS Engine** | ElevenLabs (eleven_multilingual_v2) |
 | **Voz** | Rachel (EXAVITQu4vr4xnSDxMaL) |
-| **Repositorio** | github.com/terrizoaguimor/ivr-unity |
+| **Autenticación** | HTTP Basic Auth (htpasswd) |
+
+---
+
+## Navegación Rápida
+
+| Desde el Simulador | Desde el Diagrama |
+|--------------------|-------------------|
+| 📊 [Ver Diagrama de Flujo](diagrama.html) | 📞 [Ir al Simulador](index.html) |
 
 ---
 
 ## Contacto y Soporte
 
 Para reportar problemas o sugerencias sobre el simulador:
-- **Email:** mario.gutierrez@unityfinancialnetwork.com
-- **Equipo:** Unity IT Team
+
+| Tipo | Contacto |
+|------|----------|
+| **Email** | mario.gutierrez@unityfinancialnetwork.com |
+| **Equipo** | Unity IT Team |
+
+---
+
+**Unity Financial** - *Great Deals. Greater Trust.*
 
 ---
 
 *Última actualización: Enero 2026*
-*Versión del Simulador: 1.0*
+*Versión del Simulador: 1.1*
