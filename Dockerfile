@@ -11,6 +11,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy application files
 COPY index.html /usr/share/nginx/html/
+COPY diagrama.html /usr/share/nginx/html/
 COPY config.js /usr/share/nginx/html/
 COPY css/ /usr/share/nginx/html/css/
 COPY js/ /usr/share/nginx/html/js/

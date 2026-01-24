@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IVR Unity Financial - Diagrama de Flujo Interactivo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #1a5f7a;
+      --primary-light: #2d7a9a;
+      --secondary: #6c757d;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --info: #17a2b8;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --salud: #28a745;
+      --vida: #6f42c1;
+      --pc: #fd7e14;
+      --pqrs: #20c997;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    header p {
+      opacity: 0.9;
+    }
+
+    .instructions {
+      background: rgba(255,255,255,0.95);
+      border-radius: 12px;
+      padding: 15px 25px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .instructions-icon {
+      font-size: 2rem;
+    }
+
+    .instructions-text {
+      flex: 1;
+    }
+
+    .instructions-text h3 {
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .instructions-text p {
+      color: var(--secondary);
+      font-size: 0.9rem;
+    }
+
+    .now-playing {
+      background: var(--primary);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .now-playing.hidden {
+      display: none;
+    }
+
+    .now-playing .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .flowchart {
+      background: rgba(255,255,255,0.95);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      overflow-x: auto;
+    }
+
+    .flow-level {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    .flow-level::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 20px;
+      background: var(--secondary);
+    }
+
+    .flow-level:last-child::after {
+      display: none;
+    }
+
+    .flow-node {
+      background: white;
+      border: 3px solid var(--primary);
+      border-radius: 12px;
+      padding: 15px 20px;
+      min-width: 180px;
+      max-width: 220px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .flow-node:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .flow-node:active {
+      transform: translateY(-2px);
+    }
+
+    .flow-node.playing {
+      border-color: var(--success);
+      animation: pulse-border 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-border {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+    }
+
+    .flow-node.welcome {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+    }
+
+    .flow-node.menu-principal {
+      border-color: var(--dark);
+      background: var(--dark);
+      color: white;
+    }
+
+    .flow-node.salud {
+      border-color: var(--salud);
+    }
+    .flow-node.salud .node-icon { background: var(--salud); }
+
+    .flow-node.vida {
+      border-color: var(--vida);
+    }
+    .flow-node.vida .node-icon { background: var(--vida); }
+
+    .flow-node.pc {
+      border-color: var(--pc);
+    }
+    .flow-node.pc .node-icon { background: var(--pc); }
+
+    .flow-node.pqrs {
+      border-color: var(--pqrs);
+    }
+    .flow-node.pqrs .node-icon { background: var(--pqrs); }
+
+    .flow-node.transfer {
+      border-color: var(--danger);
+      border-style: dashed;
+    }
+
+    .flow-node.urgente {
+      border-color: var(--danger);
+      background: linear-gradient(135deg, #fff 0%, #ffe0e0 100%);
+    }
+
+    .node-key {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .flow-node.salud .node-key { background: var(--salud); }
+    .flow-node.vida .node-key { background: var(--vida); }
+    .flow-node.pc .node-key { background: var(--pc); }
+    .flow-node.pqrs .node-key { background: var(--pqrs); }
+    .flow-node.transfer .node-key { background: var(--danger); }
+
+    .node-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .node-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+      color: inherit;
+    }
+
+    .node-subtitle {
+      font-size: 0.75rem;
+      color: var(--secondary);
+      opacity: 0.8;
+    }
+
+    .flow-node.welcome .node-subtitle,
+    .flow-node.menu-principal .node-subtitle {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .node-queue {
+      font-size: 0.7rem;
+      background: rgba(0,0,0,0.1);
+      padding: 3px 8px;
+      border-radius: 10px;
+      margin-top: 8px;
+      display: inline-block;
+    }
+
+    .section-title {
+      text-align: center;
+      color: var(--secondary);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 30px 0 15px;
+      position: relative;
+    }
+
+    .section-title::before,
+    .section-title::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 100px;
+      height: 1px;
+      background: var(--secondary);
+      opacity: 0.3;
+    }
+
+    .section-title::before { right: calc(50% + 80px); }
+    .section-title::after { left: calc(50% + 80px); }
+
+    .submenu-container {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .submenu-group {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      min-width: 280px;
+    }
+
+    .submenu-group h4 {
+      text-align: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid;
+    }
+
+    .submenu-group.salud h4 { border-color: var(--salud); color: var(--salud); }
+    .submenu-group.vida h4 { border-color: var(--vida); color: var(--vida); }
+    .submenu-group.pc h4 { border-color: var(--pc); color: var(--pc); }
+    .submenu-group.pqrs h4 { border-color: var(--pqrs); color: var(--pqrs); }
+
+    .submenu-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .submenu-node {
+      background: white;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .submenu-node:hover {
+      border-color: var(--primary);
+      background: #f0f7ff;
+    }
+
+    .submenu-node.playing {
+      border-color: var(--success);
+      background: #e8f5e9;
+    }
+
+    .submenu-group.salud .submenu-node:hover { border-color: var(--salud); background: #e8f5e9; }
+    .submenu-group.vida .submenu-node:hover { border-color: var(--vida); background: #f3e5f5; }
+    .submenu-group.pc .submenu-node:hover { border-color: var(--pc); background: #fff3e0; }
+    .submenu-group.pqrs .submenu-node:hover { border-color: var(--pqrs); background: #e0f2f1; }
+
+    .submenu-key {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--secondary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .submenu-group.salud .submenu-key { background: var(--salud); }
+    .submenu-group.vida .submenu-key { background: var(--vida); }
+    .submenu-group.pc .submenu-key { background: var(--pc); }
+    .submenu-group.pqrs .submenu-key { background: var(--pqrs); }
+
+    .submenu-text {
+      flex: 1;
+    }
+
+    .submenu-title {
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--dark);
+    }
+
+    .submenu-queue {
+      font-size: 0.7rem;
+      color: var(--secondary);
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--secondary);
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 2px solid;
+    }
+
+    .legend-color.salud { border-color: var(--salud); background: rgba(40,167,69,0.1); }
+    .legend-color.vida { border-color: var(--vida); background: rgba(111,66,193,0.1); }
+    .legend-color.pc { border-color: var(--pc); background: rgba(253,126,20,0.1); }
+    .legend-color.pqrs { border-color: var(--pqrs); background: rgba(32,201,151,0.1); }
+    .legend-color.transfer { border-color: var(--danger); border-style: dashed; }
+
+    .api-config {
+      background: rgba(255,255,255,0.95);
+      border-radius: 12px;
+      padding: 15px 25px;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .api-config label {
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .api-config input {
+      flex: 1;
+      max-width: 400px;
+      padding: 8px 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .api-config input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .api-config button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .api-config button:hover {
+      background: var(--primary-light);
+    }
+
+    .api-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.85rem;
+    }
+
+    .api-status .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .api-status .dot.ready { background: var(--success); }
+    .api-status .dot.not-ready { background: var(--danger); }
+
+    footer {
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      margin-top: 30px;
+      font-size: 0.85rem;
+    }
+
+    /* Connector lines */
+    .connector {
+      position: absolute;
+      background: var(--secondary);
+      z-index: -1;
+    }
+
+    .connector.vertical {
+      width: 2px;
+      height: 30px;
+    }
+
+    .connector.horizontal {
+      height: 2px;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .flow-node {
+        min-width: 140px;
+        padding: 12px 15px;
+      }
+
+      .submenu-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .submenu-group {
+        width: 100%;
+        max-width: 350px;
+      }
+
+      .api-config {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .api-config input {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🏢 IVR Unity Financial</h1>
+      <p>Diagrama de Flujo Interactivo - Haz clic en cualquier nodo para escuchar el mensaje</p>
+    </header>
+
+    <div class="instructions">
+      <span class="instructions-icon">🔊</span>
+      <div class="instructions-text">
+        <h3>Instrucciones</h3>
+        <p>Haz clic en cualquier nodo del diagrama para escuchar el mensaje TTS correspondiente. Los nodos muestran la tecla a presionar y la cola de destino.</p>
+      </div>
+      <div class="now-playing hidden" id="nowPlaying">
+        <div class="spinner"></div>
+        <span id="nowPlayingText">Reproduciendo...</span>
+      </div>
+    </div>
+
+    <div class="flowchart">
+      <!-- Level 1: Welcome -->
+      <div class="flow-level">
+        <div class="flow-node welcome" data-node="WELCOME" onclick="playNode(this)">
+          <span class="node-icon">📞</span>
+          <div class="node-title">BIENVENIDA</div>
+          <div class="node-subtitle">Welcome to Unity Line...</div>
+        </div>
+      </div>
+
+      <!-- Level 2: Language Selection -->
+      <div class="flow-level">
+        <div class="flow-node" data-node="MAIN_MENU_EN" onclick="playNode(this)">
+          <span class="node-key">1</span>
+          <span class="node-icon">🇺🇸</span>
+          <div class="node-title">English Menu</div>
+          <div class="node-subtitle">Press 1 for English</div>
+        </div>
+        <div class="flow-node menu-principal" data-node="MAIN_MENU_ES" onclick="playNode(this)">
+          <span class="node-key">2</span>
+          <span class="node-icon">🇪🇸</span>
+          <div class="node-title">Menú Español</div>
+          <div class="node-subtitle">Para español marque 2</div>
+        </div>
+      </div>
+
+      <div class="section-title">Menú Principal (Español)</div>
+
+      <!-- Level 3: Main Menu Options -->
+      <div class="flow-level">
+        <div class="flow-node salud" data-node="MENU_SALUD" onclick="playNode(this)">
+          <span class="node-key">1</span>
+          <span class="node-icon">🏥</span>
+          <div class="node-title">SALUD</div>
+          <div class="node-subtitle">Seguros de salud</div>
+        </div>
+        <div class="flow-node vida" data-node="MENU_VIDA" onclick="playNode(this)">
+          <span class="node-key">2</span>
+          <span class="node-icon">💚</span>
+          <div class="node-title">VIDA</div>
+          <div class="node-subtitle">Seguros de vida</div>
+        </div>
+        <div class="flow-node pc" data-node="MENU_PC" onclick="playNode(this)">
+          <span class="node-key">3</span>
+          <span class="node-icon">🏠</span>
+          <div class="node-title">P&C</div>
+          <div class="node-subtitle">Propiedad y Accidentes</div>
+        </div>
+        <div class="flow-node pqrs" data-node="MENU_PQRS" onclick="playNode(this)">
+          <span class="node-key">4</span>
+          <span class="node-icon">📝</span>
+          <div class="node-title">PQRS</div>
+          <div class="node-subtitle">Quejas y Siniestros</div>
+        </div>
+        <div class="flow-node" data-node="POLICY_STATUS" onclick="playNode(this)">
+          <span class="node-key">5</span>
+          <span class="node-icon">🔍</span>
+          <div class="node-title">Estado Póliza</div>
+          <div class="node-subtitle">Consultar estado</div>
+        </div>
+        <div class="flow-node transfer" data-node="TRANSFER_AGENT" onclick="playNode(this)">
+          <span class="node-key">0</span>
+          <span class="node-icon">👤</span>
+          <div class="node-title">Asesor</div>
+          <div class="node-subtitle">Hablar con agente</div>
+          <div class="node-queue">VQ_GENERAL</div>
+        </div>
+      </div>
+
+      <div class="section-title">Submenús por Línea de Negocio</div>
+
+      <!-- Submenus -->
+      <div class="submenu-container">
+        <!-- SALUD Submenu -->
+        <div class="submenu-group salud">
+          <h4>🏥 Menú SALUD</h4>
+          <div class="submenu-options">
+            <div class="submenu-node" data-node="SALUD_COTIZACION" onclick="playNode(this)">
+              <span class="submenu-key">1</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Cotización / Afiliación</div>
+                <div class="submenu-queue">→ VQ_SALUD_VENTAS</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="SALUD_AUTORIZACION" onclick="playNode(this)">
+              <span class="submenu-key">2</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Autorización / Info</div>
+                <div class="submenu-queue">→ VQ_SALUD_SERVICIO</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="SALUD_BENEFICIOS" onclick="playNode(this)">
+              <span class="submenu-key">3</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Beneficios / Coberturas</div>
+                <div class="submenu-queue">→ AUTOATENCIÓN</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="SALUD_PAGOS" onclick="playNode(this)">
+              <span class="submenu-key">4</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Pagos / Facturación</div>
+                <div class="submenu-queue">→ VQ_SALUD_BACKOFFICE</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="TRANSFER_VQ_SALUD_GENERAL" onclick="playNode(this)">
+              <span class="submenu-key">0</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Hablar con Asesor</div>
+                <div class="submenu-queue">→ VQ_SALUD_GENERAL</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIDA Submenu -->
+        <div class="submenu-group vida">
+          <h4>💚 Menú VIDA</h4>
+          <div class="submenu-options">
+            <div class="submenu-node" data-node="VIDA_CONTRATAR" onclick="playNode(this)">
+              <span class="submenu-key">1</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Contratar / Renovar</div>
+                <div class="submenu-queue">→ VQ_VIDA_VENTAS</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="VIDA_BENEFICIARIO" onclick="playNode(this)">
+              <span class="submenu-key">2</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Cambiar Beneficiario</div>
+                <div class="submenu-queue">→ VQ_VIDA_SERVICIO</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="VIDA_INFO" onclick="playNode(this)">
+              <span class="submenu-key">3</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Info de Póliza</div>
+                <div class="submenu-queue">→ AUTOATENCIÓN</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="VIDA_RECLAMACIONES" onclick="playNode(this)">
+              <span class="submenu-key">4</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Reclamaciones</div>
+                <div class="submenu-queue">→ VQ_VIDA_SERVICIO</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="TRANSFER_VQ_VIDA_GENERAL" onclick="playNode(this)">
+              <span class="submenu-key">0</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Hablar con Asesor</div>
+                <div class="submenu-queue">→ VQ_VIDA_GENERAL</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- P&C Submenu -->
+        <div class="submenu-group pc">
+          <h4>🏠 Menú P&C</h4>
+          <div class="submenu-options">
+            <div class="submenu-node" data-node="PC_COTIZACION" onclick="playNode(this)">
+              <span class="submenu-key">1</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Cotización Auto/Hogar</div>
+                <div class="submenu-queue">→ VQ_PYC_VENTAS</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="PC_INFO" onclick="playNode(this)">
+              <span class="submenu-key">2</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Info de Póliza</div>
+                <div class="submenu-queue">→ VQ_PYC_SERVICIO</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="PC_RENOVAR" onclick="playNode(this)">
+              <span class="submenu-key">3</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Renovar Póliza</div>
+                <div class="submenu-queue">→ VQ_PYC_VENTAS</div>
+              </div>
+            </div>
+            <div class="submenu-node urgente" data-node="PC_SINIESTRO" onclick="playNode(this)">
+              <span class="submenu-key" style="background: var(--danger);">4</span>
+              <div class="submenu-text">
+                <div class="submenu-title">🚨 Reportar Siniestro</div>
+                <div class="submenu-queue">→ VQ_PYC_SINIESTRO (24/7)</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="TRANSFER_VQ_PYC_GENERAL" onclick="playNode(this)">
+              <span class="submenu-key">0</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Hablar con Asesor</div>
+                <div class="submenu-queue">→ VQ_PYC_GENERAL</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PQRS Submenu -->
+        <div class="submenu-group pqrs">
+          <h4>📝 Menú PQRS</h4>
+          <div class="submenu-options">
+            <div class="submenu-node" data-node="PQRS_QUEJA" onclick="playNode(this)">
+              <span class="submenu-key">1</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Queja / Reclamación</div>
+                <div class="submenu-queue">→ VQ_PQRS_GENERAL</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="PQRS_SUGERENCIA" onclick="playNode(this)">
+              <span class="submenu-key">2</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Sugerencia</div>
+                <div class="submenu-queue">→ VQ_PQRS_GENERAL</div>
+              </div>
+            </div>
+            <div class="submenu-node urgente" data-node="PQRS_SINIESTRO" onclick="playNode(this)">
+              <span class="submenu-key" style="background: var(--danger);">3</span>
+              <div class="submenu-text">
+                <div class="submenu-title">🚨 Siniestro Urgente</div>
+                <div class="submenu-queue">→ VQ_SINIESTRO_URGENTE (24/7)</div>
+              </div>
+            </div>
+            <div class="submenu-node" data-node="TRANSFER_VQ_PQRS_GENERAL" onclick="playNode(this)">
+              <span class="submenu-key">0</span>
+              <div class="submenu-text">
+                <div class="submenu-title">Asesor Especializado</div>
+                <div class="submenu-queue">→ VQ_PQRS_GENERAL</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color salud"></div>
+          <span>Salud</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color vida"></div>
+          <span>Vida</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color pc"></div>
+          <span>P&C</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color pqrs"></div>
+          <span>PQRS</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color transfer"></div>
+          <span>Transferencia</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Configuration -->
+    <div class="api-config">
+      <label for="apiKey">🔑 API Key ElevenLabs:</label>
+      <input type="password" id="apiKey" placeholder="Ingresa tu API key para habilitar el audio">
+      <button onclick="saveApiKey()">Guardar</button>
+      <div class="api-status" id="apiStatus">
+        <div class="dot not-ready"></div>
+        <span>Sin configurar</span>
+      </div>
+    </div>
+
+    <footer>
+      <p>Unity Financial IVR - Diagrama Interactivo | <a href="index.html" style="color: white;">Ir al Simulador Completo</a></p>
+    </footer>
+  </div>
+
+  <!-- Audio Player -->
+  <audio id="audioPlayer"></audio>
+
+  <!-- IVR Flow Data -->
+  <script src="js/ivr-flow.js"></script>
+
+  <script>
+    // Configuration
+    const ELEVENLABS_API_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
+    const VOICE_ID = 'EXAVITQu4vr4xnSDxMaL';
+    const MODEL_ID = 'eleven_multilingual_v2';
+
+    let apiKey = '';
+    let audioPlayer = document.getElementById('audioPlayer');
+    let currentPlayingNode = null;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load API key from localStorage or env
+      apiKey = localStorage.getItem('elevenlabs_api_key') || window.ELEVENLABS_API_KEY || '';
+      if (apiKey) {
+        document.getElementById('apiKey').value = apiKey;
+        updateApiStatus(true);
+      }
+    });
+
+    // Save API Key
+    function saveApiKey() {
+      apiKey = document.getElementById('apiKey').value.trim();
+      if (apiKey) {
+        localStorage.setItem('elevenlabs_api_key', apiKey);
+        updateApiStatus(true);
+        alert('API Key guardada correctamente');
+      }
+    }
+
+    // Update API Status indicator
+    function updateApiStatus(ready) {
+      const status = document.getElementById('apiStatus');
+      if (ready) {
+        status.innerHTML = '<div class="dot ready"></div><span>Listo</span>';
+      } else {
+        status.innerHTML = '<div class="dot not-ready"></div><span>Sin configurar</span>';
+      }
+    }
+
+    // Play node audio
+    async function playNode(element) {
+      const nodeId = element.dataset.node;
+      const node = IVR_FLOW[nodeId];
+
+      if (!node) {
+        console.error('Node not found:', nodeId);
+        return;
+      }
+
+      if (!apiKey) {
+        alert('Por favor configura tu API Key de ElevenLabs para escuchar el audio.');
+        return;
+      }
+
+      // Stop current audio if playing
+      if (currentPlayingNode) {
+        audioPlayer.pause();
+        currentPlayingNode.classList.remove('playing');
+      }
+
+      // Set new playing node
+      currentPlayingNode = element;
+      element.classList.add('playing');
+
+      // Show now playing indicator
+      const nowPlaying = document.getElementById('nowPlaying');
+      const nowPlayingText = document.getElementById('nowPlayingText');
+      nowPlaying.classList.remove('hidden');
+      nowPlayingText.textContent = node.displayText ? node.displayText.split('\n')[0] : nodeId;
+
+      try {
+        // Generate TTS
+        const response = await fetch(`${ELEVENLABS_API_URL}/${VOICE_ID}`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'audio/mpeg',
+            'Content-Type': 'application/json',
+            'xi-api-key': apiKey
+          },
+          body: JSON.stringify({
+            text: node.message,
+            model_id: MODEL_ID,
+            voice_settings: {
+              stability: 0.5,
+              similarity_boost: 0.75
+            }
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        audioPlayer.src = audioUrl;
+        audioPlayer.play();
+
+        // Handle audio end
+        audioPlayer.onended = () => {
+          element.classList.remove('playing');
+          nowPlaying.classList.add('hidden');
+          URL.revokeObjectURL(audioUrl);
+          currentPlayingNode = null;
+        };
+
+      } catch (error) {
+        console.error('Error playing audio:', error);
+        alert('Error al reproducir audio: ' + error.message);
+        element.classList.remove('playing');
+        nowPlaying.classList.add('hidden');
+        currentPlayingNode = null;
+      }
+    }
+  </script>
+</body>
+</html>
