@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IVR Unity Financial - Diagrama de Flujo Interactivo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -14,24 +15,31 @@
     }
 
     :root {
-      --primary: #1a5f7a;
-      --primary-light: #2d7a9a;
-      --secondary: #6c757d;
-      --success: #28a745;
+      --corp-primary: #0F4C81;
+      --corp-primary-dark: #0a3659;
+      --corp-primary-light: #1565a8;
+      --corp-secondary: #2E7D32;
+      --corp-accent: #FF6F00;
+      --corp-gold: #C9A227;
+      --corp-dark: #1a1a2e;
+      --primary: #0F4C81;
+      --primary-light: #1565a8;
+      --secondary: #4a5568;
+      --success: #2E7D32;
       --warning: #ffc107;
       --danger: #dc3545;
       --info: #17a2b8;
-      --light: #f8f9fa;
-      --dark: #343a40;
-      --salud: #28a745;
+      --light: #f7fafc;
+      --dark: #1a1a2e;
+      --salud: #2E7D32;
       --vida: #6f42c1;
-      --pc: #fd7e14;
-      --pqrs: #20c997;
+      --pc: #FF6F00;
+      --pqrs: #0F4C81;
     }
 
     body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
       min-height: 100vh;
       padding: 20px;
     }
@@ -42,30 +50,82 @@
     }
 
     header {
+      background: linear-gradient(135deg, var(--corp-primary) 0%, var(--corp-primary-dark) 100%);
+      padding: 25px 30px;
+      border-radius: 16px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 20px rgba(15, 76, 129, 0.3);
       text-align: center;
-      color: white;
-      margin-bottom: 30px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 8px;
+    }
+
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     header h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.5px;
     }
 
-    header p {
-      opacity: 0.9;
+    header .subtitle {
+      color: rgba(255,255,255,0.85);
+      font-weight: 400;
+      font-size: 0.95rem;
+    }
+
+    .header-nav {
+      margin-top: 15px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .header-nav a:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-2px);
     }
 
     .instructions {
-      background: rgba(255,255,255,0.95);
+      background: white;
       border-radius: 12px;
       padding: 15px 25px;
-      margin-bottom: 20px;
+      margin: 20px 0;
       display: flex;
       align-items: center;
       gap: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 12px rgba(15, 76, 129, 0.1);
+      border: 1px solid rgba(15, 76, 129, 0.1);
     }
 
     .instructions-icon {
@@ -77,8 +137,9 @@
     }
 
     .instructions-text h3 {
-      color: var(--primary);
+      color: var(--corp-primary);
       margin-bottom: 5px;
+      font-weight: 600;
     }
 
     .instructions-text p {
@@ -87,7 +148,7 @@
     }
 
     .now-playing {
-      background: var(--primary);
+      background: var(--corp-primary);
       color: white;
       padding: 8px 16px;
       border-radius: 20px;
@@ -115,10 +176,11 @@
     }
 
     .flowchart {
-      background: rgba(255,255,255,0.95);
+      background: white;
       border-radius: 16px;
       padding: 30px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 20px rgba(15, 76, 129, 0.1);
+      border: 1px solid rgba(15, 76, 129, 0.1);
       overflow-x: auto;
     }
 
@@ -180,14 +242,14 @@
     }
 
     .flow-node.welcome {
-      border-color: var(--primary);
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-color: var(--corp-primary);
+      background: linear-gradient(135deg, var(--corp-primary) 0%, var(--corp-primary-light) 100%);
       color: white;
     }
 
     .flow-node.menu-principal {
-      border-color: var(--dark);
-      background: var(--dark);
+      border-color: var(--corp-dark);
+      background: var(--corp-dark);
       color: white;
     }
 
@@ -426,48 +488,51 @@
     .legend-color.transfer { border-color: var(--danger); border-style: dashed; }
 
     .api-config {
-      background: rgba(255,255,255,0.95);
+      background: white;
       border-radius: 12px;
       padding: 15px 25px;
       margin-top: 20px;
       display: flex;
       align-items: center;
       gap: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 12px rgba(15, 76, 129, 0.1);
+      border: 1px solid rgba(15, 76, 129, 0.1);
     }
 
     .api-config label {
       font-weight: 500;
-      color: var(--dark);
+      color: var(--corp-dark);
     }
 
     .api-config input {
       flex: 1;
       max-width: 400px;
       padding: 8px 12px;
-      border: 2px solid #dee2e6;
+      border: 2px solid #e2e8f0;
       border-radius: 6px;
       font-size: 0.9rem;
+      font-family: inherit;
     }
 
     .api-config input:focus {
       outline: none;
-      border-color: var(--primary);
+      border-color: var(--corp-primary);
     }
 
     .api-config button {
-      background: var(--primary);
+      background: var(--corp-primary);
       color: white;
       border: none;
       padding: 8px 20px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 500;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
 
     .api-config button:hover {
-      background: var(--primary-light);
+      background: var(--corp-primary-light);
+      transform: translateY(-1px);
     }
 
     .api-status {
@@ -483,14 +548,56 @@
       border-radius: 50%;
     }
 
-    .api-status .dot.ready { background: var(--success); }
+    .api-status .dot.ready { background: var(--corp-secondary); }
     .api-status .dot.not-ready { background: var(--danger); }
 
     footer {
-      text-align: center;
-      color: rgba(255,255,255,0.8);
+      background: var(--corp-dark);
+      color: white;
+      padding: 20px;
       margin-top: 30px;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    footer p {
+      margin: 5px 0;
+    }
+
+    .footer-logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--corp-gold);
+      margin-bottom: 5px;
+    }
+
+    footer a {
+      color: var(--corp-gold);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* API Configured indicator */
+    .api-configured {
+      background: linear-gradient(135deg, var(--corp-secondary) 0%, #388e3c 100%);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
       font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .api-configured.hidden {
+      display: none;
+    }
+
+    .api-config.env-configured {
+      display: none;
     }
 
     /* Connector lines */
@@ -540,9 +647,24 @@
 <body>
   <div class="container">
     <header>
-      <h1>🏢 IVR Unity Financial</h1>
-      <p>Diagrama de Flujo Interactivo - Haz clic en cualquier nodo para escuchar el mensaje</p>
+      <div class="logo-container">
+        <div class="logo-icon">🏢</div>
+        <div>
+          <h1>Unity Financial</h1>
+          <p class="subtitle">Diagrama de Flujo IVR Interactivo</p>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <a href="index.html">📞 Simulador IVR</a>
+        <a href="GUIA_DE_USO.md" target="_blank">📖 Guía de Uso</a>
+      </nav>
     </header>
+
+    <!-- API Status -->
+    <div class="api-configured hidden" id="apiConfigured">
+      <span>✅</span>
+      <span>Sistema TTS configurado y listo - Haz clic en cualquier nodo para escuchar</span>
+    </div>
 
     <div class="instructions">
       <span class="instructions-icon">🔊</span>
@@ -828,14 +950,19 @@
     </div>
 
     <footer>
-      <p>Unity Financial IVR - Diagrama Interactivo | <a href="index.html" style="color: white;">Ir al Simulador Completo</a></p>
+      <div class="footer-logo">UNITY FINANCIAL</div>
+      <p>Great Deals. Greater Trust.</p>
+      <p style="font-size: 0.75rem; opacity: 0.7; margin-top: 10px;">
+        Diagrama de Flujo IVR Interactivo | Powered by ElevenLabs TTS
+      </p>
     </footer>
   </div>
 
   <!-- Audio Player -->
   <audio id="audioPlayer"></audio>
 
-  <!-- IVR Flow Data -->
+  <!-- Scripts - env.js is injected by docker at runtime with the API key -->
+  <script src="env.js"></script>
   <script src="js/ivr-flow.js"></script>
 
   <script>
@@ -847,14 +974,24 @@
     let apiKey = '';
     let audioPlayer = document.getElementById('audioPlayer');
     let currentPlayingNode = null;
+    let isEnvConfigured = false;
 
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
-      // Load API key from localStorage or env
-      apiKey = localStorage.getItem('elevenlabs_api_key') || window.ELEVENLABS_API_KEY || '';
-      if (apiKey) {
-        document.getElementById('apiKey').value = apiKey;
+      // Check if API key is configured via environment
+      if (window.ELEVENLABS_API_KEY && window.ELEVENLABS_API_KEY.length > 0) {
+        apiKey = window.ELEVENLABS_API_KEY;
+        isEnvConfigured = true;
+        document.getElementById('apiConfigured').classList.remove('hidden');
+        document.querySelector('.api-config').classList.add('env-configured');
         updateApiStatus(true);
+      } else {
+        // Load API key from localStorage
+        apiKey = localStorage.getItem('elevenlabs_api_key') || '';
+        if (apiKey) {
+          document.getElementById('apiKey').value = apiKey;
+          updateApiStatus(true);
+        }
       }
     });
 
