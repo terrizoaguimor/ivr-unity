@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import gsap from "gsap";
+import { useState } from "react";
 import { Phone, Clock, CheckCircle, Activity, Users, Zap } from "lucide-react";
 import { Header } from "@/components/dashboard/header";
 import { StatsCard } from "@/components/dashboard/stats-card";
@@ -16,7 +15,6 @@ import type { Call } from "@/types";
 export default function DashboardPage() {
   const { calls, activeCalls, connected } = useRealtimeCalls();
   const [selectedCall, setSelectedCall] = useState<Call | null>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   // Calculate stats
   const todayCalls = calls.length;
@@ -25,18 +23,6 @@ export default function DashboardPage() {
     : 0;
   const completedCalls = calls.filter((c) => c.status === "completed").length;
   const resolutionRate = todayCalls > 0 ? Math.round((completedCalls / todayCalls) * 100) : 0;
-
-  useEffect(() => {
-    if (!contentRef.current) return;
-
-    gsap.from(contentRef.current.children, {
-      y: 30,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: "power2.out",
-    });
-  }, []);
 
   const departments = [
     { name: "SALUD", count: 12, gradient: "from-emerald-500 to-teal-600" },
@@ -55,7 +41,7 @@ export default function DashboardPage() {
         subtitle={connected ? "Conectado en tiempo real" : "Modo demo"}
       />
 
-      <div ref={contentRef} className="p-6">
+      <div className="p-6">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatsCard

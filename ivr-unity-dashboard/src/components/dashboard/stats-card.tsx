@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
 import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,8 +23,6 @@ export function StatsCard({
   color = "blue",
   index = 0
 }: StatsCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
-
   const gradients = {
     blue: "from-blue-500 to-indigo-600",
     green: "from-emerald-500 to-teal-600",
@@ -45,22 +41,8 @@ export function StatsCard({
     cyan: "shadow-cyan-500/20",
   };
 
-  useEffect(() => {
-    if (!cardRef.current) return;
-
-    gsap.from(cardRef.current, {
-      y: 40,
-      opacity: 0,
-      scale: 0.95,
-      duration: 0.6,
-      delay: index * 0.1,
-      ease: "power3.out",
-    });
-  }, [index]);
-
   return (
     <div
-      ref={cardRef}
       className={cn(
         "relative overflow-hidden rounded-2xl",
         "bg-white/5 backdrop-blur-xl",
@@ -68,8 +50,9 @@ export function StatsCard({
         "p-6 transition-all duration-300",
         "hover:bg-white/10 hover:border-white/20",
         "hover:shadow-lg hover:shadow-black/20",
-        "group"
+        "group animate-fadeIn"
       )}
+      style={{ animationDelay: `${index * 100}ms` }}
     >
       {/* Background glow effect */}
       <div
