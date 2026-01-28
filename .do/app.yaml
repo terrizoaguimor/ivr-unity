@@ -1,18 +1,8 @@
 name: ivr-unity
 region: nyc
 
-# ============================================================================
-# IVR Unity - DigitalOcean App Platform Deployment
-# ============================================================================
-# This configuration deploys:
-# 1. ivr-unity-backend  - Node.js/TypeScript API server (Telnyx + ElevenLabs)
-# 2. ivr-unity-dashboard - Next.js frontend dashboard with glassmorphism UI
-# ============================================================================
-
 services:
-  # --------------------------------------------------------------------------
   # Backend API Service (Telnyx + ElevenLabs Bridge)
-  # --------------------------------------------------------------------------
   - name: ivr-backend
     github:
       repo: terrizoaguimor/ivr-unity
@@ -24,23 +14,14 @@ services:
     http_port: 3000
     instance_count: 1
     instance_size_slug: apps-s-1vcpu-1gb
-    routes:
-      - path: /api
-        preserve_path_prefix: true
-      - path: /telnyx
-        preserve_path_prefix: true
-      - path: /stream
-        preserve_path_prefix: true
-      - path: /health
     health_check:
       http_path: /health
-      initial_delay_seconds: 15
+      initial_delay_seconds: 20
       period_seconds: 30
       timeout_seconds: 5
       success_threshold: 1
       failure_threshold: 3
     envs:
-      # Server Configuration
       - key: NODE_ENV
         scope: RUN_TIME
         value: production
@@ -50,7 +31,6 @@ services:
       - key: LOG_LEVEL
         scope: RUN_TIME
         value: info
-      # Telnyx Configuration
       - key: TELNYX_API_KEY
         scope: RUN_TIME
         type: SECRET
@@ -60,21 +40,14 @@ services:
       - key: TELNYX_CONNECTION_ID
         scope: RUN_TIME
         type: SECRET
-      # ElevenLabs Configuration
       - key: ELEVENLABS_API_KEY
         scope: RUN_TIME
         type: SECRET
       - key: ELEVENLABS_AGENT_ID
         scope: RUN_TIME
         type: SECRET
-      # CORS Configuration
-      - key: CORS_ORIGIN
-        scope: RUN_TIME
-        value: ${ivr-dashboard.PUBLIC_URL}
 
-  # --------------------------------------------------------------------------
   # Dashboard Frontend (Next.js with Glassmorphism UI)
-  # --------------------------------------------------------------------------
   - name: ivr-dashboard
     github:
       repo: terrizoaguimor/ivr-unity
@@ -86,32 +59,26 @@ services:
     http_port: 3000
     instance_count: 1
     instance_size_slug: apps-s-1vcpu-1gb
-    routes:
-      - path: /
     health_check:
       http_path: /
-      initial_delay_seconds: 20
+      initial_delay_seconds: 30
       period_seconds: 30
       timeout_seconds: 5
       success_threshold: 1
       failure_threshold: 3
     envs:
-      # Server Configuration
       - key: NODE_ENV
         scope: RUN_TIME
         value: production
-      # API Configuration - Points to backend service
       - key: NEXT_PUBLIC_API_URL
         scope: RUN_AND_BUILD_TIME
         value: ${ivr-backend.PUBLIC_URL}
-      # ElevenLabs for dashboard API calls
       - key: ELEVENLABS_API_KEY
         scope: RUN_TIME
         type: SECRET
       - key: ELEVENLABS_AGENT_ID
         scope: RUN_TIME
         type: SECRET
-      # Authentication
       - key: JWT_SECRET
         scope: RUN_TIME
         type: SECRET
@@ -122,18 +89,30 @@ services:
         scope: RUN_TIME
         type: SECRET
 
-# ============================================================================
-# Alerts (Optional - Uncomment to enable)
-# ============================================================================
-# alerts:
-#   - rule: DEPLOYMENT_FAILED
-#   - rule: DOMAIN_FAILED
-#   - rule: DEPLOYMENT_LIVE
-
-# ============================================================================
-# Domains (Configure after initial deployment)
-# ============================================================================
-# domains:
-#   - domain: ivr.unityfinancial.co
-#     type: PRIMARY
-#     zone: unityfinancial.co
+ingress:
+  rules:
+    - component:
+        name: ivr-dashboard
+      match:
+        path:
+          prefix: /
+    - component:
+        name: ivr-backend
+      match:
+        path:
+          prefix: /api
+    - component:
+        name: ivr-backend
+      match:
+        path:
+          prefix: /telnyx
+    - component:
+        name: ivr-backend
+      match:
+        path:
+          prefix: /stream
+    - component:
+        name: ivr-backend
+      match:
+        path:
+          prefix: /health
