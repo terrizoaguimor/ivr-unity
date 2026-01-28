@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 interface HeaderProps {
   title: string;
   subtitle?: string;
+  children?: React.ReactNode;
 }
 
-export function Header({ title, subtitle }: HeaderProps) {
+export function Header({ title, subtitle, children }: HeaderProps) {
   return (
     <header
       className={cn(
@@ -19,13 +20,20 @@ export function Header({ title, subtitle }: HeaderProps) {
         "flex items-center justify-between px-6"
       )}
     >
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-          {title}
-          <Sparkles className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
-        </h1>
-        {subtitle && (
-          <p className="text-sm text-slate-500 dark:text-white/50">{subtitle}</p>
+      <div className="flex items-center gap-4">
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+            {title}
+            <Sparkles className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
+          </h1>
+          {subtitle && (
+            <p className="text-sm text-slate-500 dark:text-white/50">{subtitle}</p>
+          )}
+        </div>
+        {children && (
+          <div className="hidden sm:flex items-center gap-2">
+            {children}
+          </div>
         )}
       </div>
 

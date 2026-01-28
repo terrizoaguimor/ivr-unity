@@ -10,6 +10,7 @@ interface StatsCardProps {
   trend?: {
     value: number;
     label: string;
+    positive?: boolean;
   };
   color?: "blue" | "green" | "yellow" | "red" | "purple" | "cyan";
   index?: number;
@@ -86,18 +87,18 @@ export function StatsCard({
               <div
                 className={cn(
                   "flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium",
-                  trend.value >= 0
+                  (trend.positive ?? trend.value >= 0)
                     ? "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400"
                     : "bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400"
                 )}
               >
-                {trend.value >= 0 ? (
+                {(trend.positive ?? trend.value >= 0) ? (
                   <TrendingUp className="w-3 h-3" />
                 ) : (
                   <TrendingDown className="w-3 h-3" />
                 )}
                 <span>
-                  {trend.value >= 0 ? "+" : ""}
+                  {(trend.positive ?? trend.value >= 0) ? "+" : "-"}
                   {trend.value}%
                 </span>
               </div>

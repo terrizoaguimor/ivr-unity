@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Download, Play, User, Bot, Clock, CheckCircle, Calendar, MessageSquare } from "lucide-react";
+import { ArrowLeft, User, Bot, Clock, CheckCircle, Calendar, MessageSquare, Volume2 } from "lucide-react";
 import { Header } from "@/components/dashboard/header";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { AudioPlayer } from "@/components/ui/audio-player";
 import { getConversation } from "@/lib/elevenlabs";
 import { formatDuration, cn } from "@/lib/utils";
 
@@ -104,27 +104,40 @@ export default async function TranscriptDetailPage({ params }: PageProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Conversation */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
+            {/* Audio Player Card */}
+            <GlassCard className="overflow-hidden">
+              <div className="p-4 border-b border-slate-200 dark:border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600">
+                    <Volume2 className="w-4 h-4 text-white" />
+                  </div>
+                  <h3 className="text-sm font-medium text-slate-900 dark:text-white">
+                    Grabación de Audio
+                  </h3>
+                </div>
+              </div>
+              <div className="p-4">
+                <AudioPlayer
+                  src={`/api/transcripts/${transcript.conversationId}/audio`}
+                  title={`conversation-${transcript.conversationId}.mp3`}
+                />
+              </div>
+            </GlassCard>
+
+            {/* Messages Card */}
             <GlassCard className="overflow-hidden">
               <div className="p-6 border-b border-slate-200 dark:border-white/10">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600">
-                      <MessageSquare className="w-5 h-5 text-white" />
-                    </div>
-                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                      Conversación
-                    </h2>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600">
+                    <MessageSquare className="w-5 h-5 text-white" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="secondary" size="sm">
-                      <Play className="w-4 h-4 mr-2" />
-                      Reproducir
-                    </Button>
-                    <Button variant="glass" size="sm">
-                      <Download className="w-4 h-4" />
-                    </Button>
-                  </div>
+                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+                    Conversación
+                  </h2>
+                  <span className="text-sm text-slate-500 dark:text-white/50">
+                    ({transcript.messages.length} mensajes)
+                  </span>
                 </div>
               </div>
               <div className="p-6">
@@ -183,7 +196,7 @@ export default async function TranscriptDetailPage({ params }: PageProps) {
             </GlassCard>
           </div>
 
-          {/* Details */}
+          {/* Details Sidebar */}
           <div className="space-y-6">
             {/* Info Card */}
             <GlassCard>
