@@ -1,0 +1,44 @@
+name: ivr-unity-backend
+region: nyc
+services:
+  - name: backend
+    github:
+      repo: terrizoaguimor/ivr-unity
+      branch: main
+      deploy_on_push: true
+    source_dir: ivr-unity-backend
+    dockerfile_path: ivr-unity-backend/Dockerfile
+    http_port: 3000
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-1gb
+    routes:
+      - path: /
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 10
+      period_seconds: 30
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    envs:
+      - key: NODE_ENV
+        scope: RUN_TIME
+        value: production
+      - key: LOG_LEVEL
+        scope: RUN_TIME
+        value: info
+      - key: HOST
+        scope: RUN_TIME
+        value: ${APP_DOMAIN}
+      - key: TELNYX_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: TELNYX_PUBLIC_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: ELEVENLABS_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: ELEVENLABS_AGENT_ID
+        scope: RUN_TIME
+        type: SECRET
