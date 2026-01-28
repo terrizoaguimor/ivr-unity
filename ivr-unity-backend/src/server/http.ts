@@ -28,6 +28,7 @@ export function createHttpServer(): Application {
   app.get('/health', (req: Request, res: Response) => {
     res.json({
       status: 'healthy',
+      version: '1.0.0',
       timestamp: new Date().toISOString(),
       activeCalls: sessionManager.activeCount,
       environment: config.nodeEnv,
