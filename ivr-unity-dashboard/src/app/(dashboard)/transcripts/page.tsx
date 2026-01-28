@@ -55,21 +55,21 @@ async function TranscriptsList() {
   return (
     <>
       {error && (
-        <div className="mb-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-          <p className="text-sm text-amber-400">
+        <div className="mb-4 p-4 bg-amber-100 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl">
+          <p className="text-sm text-amber-700 dark:text-amber-400">
             Usando datos de demostración. Error: {error}
           </p>
         </div>
       )}
 
       <GlassCard className="overflow-hidden">
-        <div className="p-6 border-b border-white/10">
+        <div className="p-6 border-b border-slate-200 dark:border-white/10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600">
                 <MessageSquare className="w-5 h-5 text-white" />
               </div>
-              <h2 className="text-lg font-semibold text-white">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                 Transcripciones Recientes
               </h2>
             </div>
@@ -79,44 +79,44 @@ async function TranscriptsList() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-white/10">
-                <th className="px-6 py-4 text-left text-xs font-medium text-white/50 uppercase tracking-wider">
+              <tr className="border-b border-slate-200 dark:border-white/10">
+                <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-white/50 uppercase tracking-wider">
                   Fecha
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white/50 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-white/50 uppercase tracking-wider">
                   Duración
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white/50 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-white/50 uppercase tracking-wider">
                   Motivo
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white/50 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-white/50 uppercase tracking-wider">
                   Estado
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-white/50 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-white/50 uppercase tracking-wider">
                   Acciones
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/5">
               {transcripts.map((t) => (
                 <tr
                   key={t.id}
-                  className="hover:bg-white/5 transition-colors"
+                  className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <p className="font-medium text-white">
+                      <p className="font-medium text-slate-900 dark:text-white">
                         {new Date(t.startTime).toLocaleDateString("es-CO")}
                       </p>
-                      <p className="text-xs text-white/40">
+                      <p className="text-xs text-slate-500 dark:text-white/40">
                         {new Date(t.startTime).toLocaleTimeString("es-CO")}
                       </p>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-white/70">
+                  <td className="px-6 py-4 whitespace-nowrap text-slate-600 dark:text-white/70">
                     {formatDuration(t.duration)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-white/70">
+                  <td className="px-6 py-4 whitespace-nowrap text-slate-600 dark:text-white/70">
                     {t.analysis?.collectedData?.call_reason || "No especificado"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -168,15 +168,15 @@ export default function TranscriptsPage() {
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/40" />
               <input
                 type="text"
                 placeholder="Buscar en transcripciones..."
                 className={cn(
                   "pl-10 pr-4 py-2.5 w-80",
-                  "bg-white/5 backdrop-blur-sm",
-                  "border border-white/10 rounded-xl",
-                  "text-sm text-white placeholder:text-white/30",
+                  "bg-white dark:bg-white/5 backdrop-blur-sm",
+                  "border border-slate-200 dark:border-white/10 rounded-xl",
+                  "text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/30",
                   "focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50",
                   "transition-all duration-200"
                 )}
@@ -199,7 +199,7 @@ export default function TranscriptsPage() {
           fallback={
             <GlassCard>
               <div className="flex items-center justify-center py-16">
-                <div className="flex items-center gap-3 text-white/50">
+                <div className="flex items-center gap-3 text-slate-500 dark:text-white/50">
                   <Sparkles className="w-5 h-5 animate-pulse" />
                   <span>Cargando transcripciones...</span>
                 </div>

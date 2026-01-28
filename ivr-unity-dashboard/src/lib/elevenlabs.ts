@@ -91,31 +91,36 @@ export async function getConversationAudio(conversationId: string): Promise<Blob
 
 // Helper to map API response to our types
 function mapConversationToTranscript(conv: Record<string, unknown>): Transcript {
+  // ElevenLabs API returns transcript array with: role, message, time_in_call_secs
   const transcript = conv.transcript as Array<{
     role: string;
-    content: string;
-    timestamp: number;
+    message?: string;
+    content?: string;
+    time_in_call_secs?: number;
+    timestamp?: number;
   }> || [];
 
   const analysis = conv.analysis as {
+    evaluation_criteria_results?: Record<string, { result: string; rationale?: string }>;
     evaluation_results?: Record<string, { result: string; rationale?: string }>;
+    data_collection_results?: Record<string, string>;
     collected_data?: Record<string, string>;
   } | undefined;
 
   return {
-    id: conv.conversation_id as string,
-    conversationId: conv.conversation_id as string,
+    id: conv.conversation_id as string || conv.id as string,
+    conversationId: conv.conversation_id as string || conv.id as string,
     startTime: conv.start_time as string || new Date().toISOString(),
     endTime: conv.end_time as string || new Date().toISOString(),
-    duration: conv.duration_seconds as number || 0,
+    duration: (conv.call_duration_secs as number) || (conv.duration_seconds as number) || 0,
     messages: transcript.map((msg) => ({
-      role: msg.role as "user" | "assistant" | "system",
-      content: msg.content,
-      timestamp: msg.timestamp,
+      role: (msg.role === "agent" ? "assistant" : msg.role) as "user" | "assistant" | "system",
+      content: msg.message || msg.content || "",
+      timestamp: msg.time_in_call_secs || msg.timestamp || 0,
     })),
     analysis: analysis ? {
-      evaluationResults: analysis.evaluation_results,
-      collectedData: analysis.collected_data,
+      evaluationResults: analysis.evaluation_criteria_results || analysis.evaluation_results,
+      collectedData: analysis.data_collection_results || analysis.collected_data,
     } : undefined,
   };
 }

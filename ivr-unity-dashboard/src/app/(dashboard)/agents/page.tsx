@@ -39,8 +39,8 @@ async function AgentsList() {
   return (
     <>
       {error && (
-        <div className="mb-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-          <p className="text-sm text-amber-400">
+        <div className="mb-4 p-4 bg-amber-100 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl">
+          <p className="text-sm text-amber-700 dark:text-amber-400">
             Usando datos de demostración. Error: {error}
           </p>
         </div>
@@ -60,8 +60,8 @@ async function AgentsList() {
                     <Bot className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-white">{agent.name}</h3>
-                    <p className="text-sm text-white/50">
+                    <h3 className="font-semibold text-slate-900 dark:text-white">{agent.name}</h3>
+                    <p className="text-sm text-slate-500 dark:text-white/50">
                       {agent.language === "es" ? "Español" : "English"}
                     </p>
                   </div>
@@ -71,23 +71,23 @@ async function AgentsList() {
                 </Badge>
               </div>
 
-              <p className="text-sm text-white/60 mb-5 line-clamp-2">
+              <p className="text-sm text-slate-600 dark:text-white/60 mb-5 line-clamp-2">
                 {agent.firstMessage}
               </p>
 
               {agent.stats && (
                 <div className="grid grid-cols-2 gap-3 mb-5">
-                  <div className="p-3 bg-white/5 rounded-xl text-center">
-                    <p className="text-2xl font-bold text-white">
+                  <div className="p-3 bg-slate-100 dark:bg-white/5 rounded-xl text-center">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">
                       {agent.stats.totalCalls.toLocaleString()}
                     </p>
-                    <p className="text-xs text-white/40">Llamadas</p>
+                    <p className="text-xs text-slate-500 dark:text-white/40">Llamadas</p>
                   </div>
-                  <div className="p-3 bg-white/5 rounded-xl text-center">
-                    <p className="text-2xl font-bold text-emerald-400">
+                  <div className="p-3 bg-slate-100 dark:bg-white/5 rounded-xl text-center">
+                    <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                       {agent.stats.resolutionRate}%
                     </p>
-                    <p className="text-xs text-white/40">Resolución</p>
+                    <p className="text-xs text-slate-500 dark:text-white/40">Resolución</p>
                   </div>
                 </div>
               )}
@@ -112,7 +112,7 @@ async function AgentsList() {
         <GlassCard
           variant="subtle"
           className={cn(
-            "border-2 border-dashed border-white/10",
+            "border-2 border-dashed border-slate-200 dark:border-white/10",
             "hover:border-indigo-500/50 transition-colors cursor-pointer",
             "group"
           )}
@@ -120,13 +120,13 @@ async function AgentsList() {
           <div className="flex flex-col items-center justify-center h-full min-h-[300px] p-6">
             <div className={cn(
               "p-4 rounded-2xl mb-4 transition-all duration-300",
-              "bg-white/5 group-hover:bg-gradient-to-br group-hover:from-indigo-500 group-hover:to-purple-600",
+              "bg-slate-100 dark:bg-white/5 group-hover:bg-gradient-to-br group-hover:from-indigo-500 group-hover:to-purple-600",
               "group-hover:shadow-lg group-hover:shadow-indigo-500/30"
             )}>
-              <Plus className="w-8 h-8 text-white/40 group-hover:text-white transition-colors" />
+              <Plus className="w-8 h-8 text-slate-400 dark:text-white/40 group-hover:text-white transition-colors" />
             </div>
-            <p className="font-semibold text-white">Crear Nuevo Agente</p>
-            <p className="text-sm text-white/40 text-center mt-1">
+            <p className="font-semibold text-slate-900 dark:text-white">Crear Nuevo Agente</p>
+            <p className="text-sm text-slate-500 dark:text-white/40 text-center mt-1">
               Configura un nuevo agente de IA para tu IVR
             </p>
           </div>
@@ -162,8 +162,8 @@ export default function AgentsPage() {
                   stat.gradient
                 )} />
                 <div>
-                  <p className="text-sm text-white/50">{stat.label}</p>
-                  <p className="text-2xl font-bold text-white mt-0.5">{stat.value}</p>
+                  <p className="text-sm text-slate-500 dark:text-white/50">{stat.label}</p>
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">{stat.value}</p>
                 </div>
               </div>
             </GlassCard>
@@ -174,7 +174,7 @@ export default function AgentsPage() {
         <Suspense
           fallback={
             <div className="flex items-center justify-center py-12">
-              <div className="flex items-center gap-3 text-white/50">
+              <div className="flex items-center gap-3 text-slate-500 dark:text-white/50">
                 <Sparkles className="w-5 h-5 animate-pulse" />
                 <span>Cargando agentes...</span>
               </div>

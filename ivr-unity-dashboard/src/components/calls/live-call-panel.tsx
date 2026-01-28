@@ -70,25 +70,25 @@ export function LiveCallPanel({ call, onClose }: LiveCallPanelProps) {
   return (
     <GlassCard ref={panelRef} className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="p-5 border-b border-white/10">
+      <div className="p-5 border-b border-slate-200 dark:border-white/10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className={cn(
               "relative p-3 rounded-xl",
               isActive
-                ? "bg-emerald-500/20"
-                : "bg-white/5"
+                ? "bg-emerald-100 dark:bg-emerald-500/20"
+                : "bg-slate-100 dark:bg-white/5"
             )}>
               <Phone className={cn(
                 "w-6 h-6",
-                isActive ? "text-emerald-400" : "text-white/40"
+                isActive ? "text-emerald-500 dark:text-emerald-400" : "text-slate-400 dark:text-white/40"
               )} />
               {isActive && (
                 <span className="absolute inset-0 rounded-xl animate-ping opacity-20 bg-emerald-400" />
               )}
             </div>
             <div>
-              <h3 className="font-semibold text-white">
+              <h3 className="font-semibold text-slate-900 dark:text-white">
                 {formatPhoneNumber(call.caller)}
               </h3>
               <div className="flex items-center gap-2 mt-1">
@@ -105,18 +105,18 @@ export function LiveCallPanel({ call, onClose }: LiveCallPanelProps) {
           <div className="flex items-center gap-2">
             <div className={cn(
               "flex items-center gap-2 px-3 py-1.5 rounded-lg",
-              "bg-white/5 border border-white/10"
+              "bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10"
             )}>
-              <Clock className="w-4 h-4 text-white/50" />
-              <span className="font-mono text-sm text-white">
+              <Clock className="w-4 h-4 text-slate-500 dark:text-white/50" />
+              <span className="font-mono text-sm text-slate-900 dark:text-white">
                 {formatDuration(duration)}
               </span>
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
             >
-              <X className="w-5 h-5 text-white/50" />
+              <X className="w-5 h-5 text-slate-500 dark:text-white/50" />
             </button>
           </div>
         </div>
@@ -136,12 +136,12 @@ export function LiveCallPanel({ call, onClose }: LiveCallPanelProps) {
               className={cn(
                 "w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0",
                 msg.role === "user"
-                  ? "bg-white/10"
+                  ? "bg-slate-100 dark:bg-white/10"
                   : "bg-gradient-to-br from-indigo-500 to-purple-600"
               )}
             >
               {msg.role === "user" ? (
-                <User className="w-5 h-5 text-white/70" />
+                <User className="w-5 h-5 text-slate-500 dark:text-white/70" />
               ) : (
                 <Bot className="w-5 h-5 text-white" />
               )}
@@ -150,14 +150,14 @@ export function LiveCallPanel({ call, onClose }: LiveCallPanelProps) {
               className={cn(
                 "max-w-[80%] px-4 py-3 rounded-2xl",
                 msg.role === "user"
-                  ? "bg-indigo-500/30 text-white rounded-tr-none"
-                  : "bg-white/5 text-white/90 rounded-tl-none border border-white/10"
+                  ? "bg-indigo-100 dark:bg-indigo-500/30 text-indigo-900 dark:text-white rounded-tr-none"
+                  : "bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-white/90 rounded-tl-none border border-slate-200 dark:border-white/10"
               )}
             >
               <p className="text-sm">{msg.content}</p>
               <p className={cn(
                 "text-xs mt-1.5",
-                msg.role === "user" ? "text-indigo-200" : "text-white/40"
+                msg.role === "user" ? "text-indigo-600 dark:text-indigo-200" : "text-slate-400 dark:text-white/40"
               )}>
                 {msg.timestamp.toLocaleTimeString()}
               </p>
@@ -166,11 +166,11 @@ export function LiveCallPanel({ call, onClose }: LiveCallPanelProps) {
         ))}
 
         {isActive && (
-          <div className="flex items-center gap-2 text-white/40">
+          <div className="flex items-center gap-2 text-slate-400 dark:text-white/40">
             <div className="flex gap-1">
-              <span className="w-2 h-2 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-              <span className="w-2 h-2 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-              <span className="w-2 h-2 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+              <span className="w-2 h-2 bg-slate-400 dark:bg-white/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+              <span className="w-2 h-2 bg-slate-400 dark:bg-white/40 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+              <span className="w-2 h-2 bg-slate-400 dark:bg-white/40 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
             </div>
             <span className="text-sm">Escuchando...</span>
           </div>
@@ -178,7 +178,7 @@ export function LiveCallPanel({ call, onClose }: LiveCallPanelProps) {
       </div>
 
       {/* Controls */}
-      <div className="p-5 border-t border-white/10">
+      <div className="p-5 border-t border-slate-200 dark:border-white/10">
         <div className="flex items-center justify-center gap-3">
           <Button
             variant="glass"

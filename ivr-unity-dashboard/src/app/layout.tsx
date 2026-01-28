@@ -27,12 +27,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" suppressHydrationWarning className={`${inter.variable} ${jakarta.variable}`}>
-      <body className="bg-slate-950 text-white antialiased">
+      <body className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white antialiased transition-colors duration-300">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
         >
           <SmoothScrollProvider>
             {children}

@@ -23,22 +23,22 @@ const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
         ref={ref}
         className={cn(
           "relative overflow-hidden rounded-2xl",
-          "bg-white/10",
+          "bg-white/70 dark:bg-white/10",
           blurMap[blur],
-          "border border-white/20",
-          "shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
-          variant === "subtle" && "bg-white/5 border-white/10",
-          variant === "bordered" && "border-2 border-white/25",
+          "border border-slate-200 dark:border-white/20",
+          "shadow-lg shadow-black/5 dark:shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
+          variant === "subtle" && "bg-white/50 dark:bg-white/5 border-slate-100 dark:border-white/10",
+          variant === "bordered" && "border-2 border-slate-300 dark:border-white/25",
           variant === "glow" && "shadow-glass-glow",
           className
         )}
         {...props}
       >
         {/* Top highlight line */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 dark:via-white/40 to-transparent" />
 
         {/* Inner glow */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/50 dark:from-white/5 to-transparent pointer-events-none" />
 
         <div className="relative z-10">
           {children}

@@ -85,7 +85,7 @@ export default function SettingsPage() {
       <div ref={contentRef} className="p-6 max-w-4xl space-y-6">
         {/* ElevenLabs */}
         <GlassCard>
-          <div className="p-6 border-b border-white/10">
+          <div className="p-6 border-b border-slate-200 dark:border-white/10">
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-4">
                 <div className={cn(
@@ -96,8 +96,8 @@ export default function SettingsPage() {
                   <Bot className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white">ElevenLabs</h3>
-                  <p className="text-sm text-white/50">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">ElevenLabs</h3>
+                  <p className="text-sm text-slate-500 dark:text-white/50">
                     Configuración del agente de IA conversacional
                   </p>
                 </div>
@@ -122,7 +122,7 @@ export default function SettingsPage() {
               <button
                 type="button"
                 onClick={() => toggleSecret("elevenlabs-api")}
-                className="absolute right-4 bottom-3 text-white/40 hover:text-white/70 transition-colors"
+                className="absolute right-4 bottom-3 text-slate-400 dark:text-white/40 hover:text-slate-600 dark:hover:text-white/70 transition-colors"
               >
                 {showSecrets["elevenlabs-api"] ? (
                   <EyeOff className="w-5 h-5" />
@@ -158,7 +158,7 @@ export default function SettingsPage() {
 
         {/* Telnyx */}
         <GlassCard>
-          <div className="p-6 border-b border-white/10">
+          <div className="p-6 border-b border-slate-200 dark:border-white/10">
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-4">
                 <div className={cn(
@@ -169,8 +169,8 @@ export default function SettingsPage() {
                   <Phone className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white">Telnyx</h3>
-                  <p className="text-sm text-white/50">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Telnyx</h3>
+                  <p className="text-sm text-slate-500 dark:text-white/50">
                     Configuración de telefonía SIP/TeXML
                   </p>
                 </div>
@@ -195,7 +195,7 @@ export default function SettingsPage() {
               <button
                 type="button"
                 onClick={() => toggleSecret("telnyx-api")}
-                className="absolute right-4 bottom-3 text-white/40 hover:text-white/70 transition-colors"
+                className="absolute right-4 bottom-3 text-slate-400 dark:text-white/40 hover:text-slate-600 dark:hover:text-white/70 transition-colors"
               >
                 {showSecrets["telnyx-api"] ? (
                   <EyeOff className="w-5 h-5" />
@@ -216,13 +216,13 @@ export default function SettingsPage() {
               }
             />
 
-            <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+            <div className="p-4 bg-amber-100 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-amber-300">
+                <p className="text-sm font-medium text-amber-800 dark:text-amber-300">
                   Configuración pendiente
                 </p>
-                <p className="text-sm text-amber-400/70 mt-1">
+                <p className="text-sm text-amber-700 dark:text-amber-400/70 mt-1">
                   Configura el número Telnyx con el webhook URL del backend para recibir llamadas.
                 </p>
               </div>
@@ -243,7 +243,7 @@ export default function SettingsPage() {
 
         {/* General Settings */}
         <GlassCard>
-          <div className="p-6 border-b border-white/10">
+          <div className="p-6 border-b border-slate-200 dark:border-white/10">
             <div className="flex items-start gap-4">
               <div className={cn(
                 "p-3 rounded-xl",
@@ -253,8 +253,8 @@ export default function SettingsPage() {
                 <Settings className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">General</h3>
-                <p className="text-sm text-white/50">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">General</h3>
+                <p className="text-sm text-slate-500 dark:text-white/50">
                   Configuración general del sistema
                 </p>
               </div>
@@ -284,7 +284,7 @@ export default function SettingsPage() {
             />
 
             <div>
-              <label className="block text-sm font-medium text-white/70 mb-2">
+              <label className="block text-sm font-medium text-slate-600 dark:text-white/70 mb-2">
                 Idioma Predeterminado
               </label>
               <select
@@ -297,15 +297,15 @@ export default function SettingsPage() {
                 }
                 className={cn(
                   "w-full px-4 py-3",
-                  "bg-white/5 backdrop-blur-sm",
-                  "border border-white/10 rounded-xl",
-                  "text-white",
+                  "bg-white dark:bg-white/5 backdrop-blur-sm",
+                  "border border-slate-200 dark:border-white/10 rounded-xl",
+                  "text-slate-900 dark:text-white",
                   "focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50",
                   "transition-all duration-200"
                 )}
               >
-                <option value="es" className="bg-slate-900">Español</option>
-                <option value="en" className="bg-slate-900">English</option>
+                <option value="es" className="bg-white dark:bg-slate-900">Español</option>
+                <option value="en" className="bg-white dark:bg-slate-900">English</option>
               </select>
             </div>
           </div>

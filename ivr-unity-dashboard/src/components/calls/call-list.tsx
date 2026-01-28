@@ -45,7 +45,7 @@ export function CallList({ calls, onSelectCall, selectedCallId }: CallListProps)
 
   if (calls.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-white/40">
+      <div className="flex flex-col items-center justify-center py-16 text-slate-400 dark:text-white/40">
         <Phone className="w-16 h-16 mb-4 opacity-30" />
         <p className="text-lg font-medium">No hay llamadas</p>
         <p className="text-sm">Las llamadas activas aparecerán aquí</p>
@@ -54,7 +54,7 @@ export function CallList({ calls, onSelectCall, selectedCallId }: CallListProps)
   }
 
   return (
-    <div ref={listRef} className="divide-y divide-white/5">
+    <div ref={listRef} className="divide-y divide-slate-200 dark:divide-white/5">
       {calls.map((call) => (
         <div
           key={call.id}
@@ -62,8 +62,8 @@ export function CallList({ calls, onSelectCall, selectedCallId }: CallListProps)
           className={cn(
             "call-item p-4 cursor-pointer transition-all duration-200",
             selectedCallId === call.id
-              ? "bg-indigo-500/10 border-l-2 border-l-indigo-500"
-              : "hover:bg-white/5 border-l-2 border-l-transparent"
+              ? "bg-indigo-50 dark:bg-indigo-500/10 border-l-2 border-l-indigo-500"
+              : "hover:bg-slate-50 dark:hover:bg-white/5 border-l-2 border-l-transparent"
           )}
         >
           <div className="flex items-center justify-between">
@@ -73,27 +73,27 @@ export function CallList({ calls, onSelectCall, selectedCallId }: CallListProps)
                 className={cn(
                   "relative p-2.5 rounded-xl",
                   call.status === "active" || call.status === "streaming"
-                    ? "bg-emerald-500/20"
+                    ? "bg-emerald-100 dark:bg-emerald-500/20"
                     : call.status === "ringing"
-                    ? "bg-amber-500/20"
+                    ? "bg-amber-100 dark:bg-amber-500/20"
                     : call.status === "transferring"
-                    ? "bg-purple-500/20"
-                    : "bg-white/5"
+                    ? "bg-purple-100 dark:bg-purple-500/20"
+                    : "bg-slate-100 dark:bg-white/5"
                 )}
               >
                 {call.status === "transferring" ? (
-                  <ArrowRightLeft className="w-5 h-5 text-purple-400" />
+                  <ArrowRightLeft className="w-5 h-5 text-purple-500 dark:text-purple-400" />
                 ) : call.status === "completed" || call.status === "failed" ? (
-                  <PhoneOff className="w-5 h-5 text-white/40" />
+                  <PhoneOff className="w-5 h-5 text-slate-400 dark:text-white/40" />
                 ) : (
                   <Phone
                     className={cn(
                       "w-5 h-5",
                       call.status === "active" || call.status === "streaming"
-                        ? "text-emerald-400"
+                        ? "text-emerald-500 dark:text-emerald-400"
                         : call.status === "ringing"
-                        ? "text-amber-400"
-                        : "text-white/40"
+                        ? "text-amber-500 dark:text-amber-400"
+                        : "text-slate-400 dark:text-white/40"
                     )}
                   />
                 )}
@@ -104,10 +104,10 @@ export function CallList({ calls, onSelectCall, selectedCallId }: CallListProps)
 
               {/* Call Info */}
               <div>
-                <p className="font-medium text-white">
+                <p className="font-medium text-slate-900 dark:text-white">
                   {formatPhoneNumber(call.caller)}
                 </p>
-                <p className="text-sm text-white/50">
+                <p className="text-sm text-slate-500 dark:text-white/50">
                   {call.department || "Sin departamento"}
                 </p>
               </div>
@@ -116,7 +116,7 @@ export function CallList({ calls, onSelectCall, selectedCallId }: CallListProps)
             <div className="flex items-center gap-4">
               {/* Duration */}
               {call.duration !== undefined && (
-                <div className="flex items-center gap-1.5 text-sm text-white/40">
+                <div className="flex items-center gap-1.5 text-sm text-slate-400 dark:text-white/40">
                   <Clock className="w-4 h-4" />
                   <span>{formatDuration(call.duration)}</span>
                 </div>
@@ -129,8 +129,8 @@ export function CallList({ calls, onSelectCall, selectedCallId }: CallListProps)
 
           {/* Agent Response Preview */}
           {call.agentResponse && (
-            <p className="mt-3 text-sm text-white/60 line-clamp-1 pl-14">
-              <span className="font-medium text-white/70">Agente:</span> {call.agentResponse}
+            <p className="mt-3 text-sm text-slate-500 dark:text-white/60 line-clamp-1 pl-14">
+              <span className="font-medium text-slate-600 dark:text-white/70">Agente:</span> {call.agentResponse}
             </p>
           )}
         </div>

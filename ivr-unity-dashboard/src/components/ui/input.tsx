@@ -26,10 +26,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               "block text-sm font-medium mb-2 transition-colors duration-200",
               error
-                ? "text-red-400"
+                ? "text-red-500 dark:text-red-400"
                 : focused
-                ? "text-indigo-400"
-                : "text-white/70"
+                ? "text-indigo-600 dark:text-indigo-400"
+                : "text-slate-600 dark:text-white/70"
             )}
           >
             {label}
@@ -37,7 +37,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/40">
               {icon}
             </div>
           )}
@@ -59,11 +59,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             }}
             className={cn(
               "w-full px-4 py-3 rounded-xl",
-              "bg-white/5 backdrop-blur-sm",
-              "border border-white/20",
-              "text-white placeholder-white/40",
+              "bg-white dark:bg-white/5 backdrop-blur-sm",
+              "border border-slate-200 dark:border-white/20",
+              "text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/40",
               "outline-none transition-all duration-300",
-              "focus:bg-white/10 focus:border-white/40",
+              "focus:bg-slate-50 dark:focus:bg-white/10 focus:border-slate-300 dark:focus:border-white/40",
               "focus:ring-2 focus:ring-indigo-500/30",
               icon && "pl-12",
               isPassword && "pr-12",
@@ -75,14 +75,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/40 hover:text-slate-600 dark:hover:text-white/70 transition-colors"
             >
               {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           )}
         </div>
         {error && (
-          <p className="mt-2 text-sm text-red-400">{error}</p>
+          <p className="mt-2 text-sm text-red-500 dark:text-red-400">{error}</p>
         )}
       </div>
     );

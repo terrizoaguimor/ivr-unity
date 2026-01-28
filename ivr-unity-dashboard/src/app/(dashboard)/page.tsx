@@ -35,7 +35,7 @@ export default function DashboardPage() {
   const totalDeptCalls = departments.reduce((sum, d) => sum + d.count, 0);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-slate-50 dark:bg-transparent">
       <Header
         title="Dashboard"
         subtitle={connected ? "Conectado en tiempo real" : "Modo demo"}
@@ -81,13 +81,13 @@ export default function DashboardPage() {
           {/* Active Calls */}
           <div className="lg:col-span-2">
             <GlassCard className="overflow-hidden">
-              <div className="p-6 border-b border-white/10">
+              <div className="p-6 border-b border-slate-200 dark:border-white/10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600">
                       <Zap className="w-5 h-5 text-white" />
                     </div>
-                    <h2 className="text-lg font-semibold text-white">
+                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                       Llamadas en Tiempo Real
                     </h2>
                     {activeCalls.length > 0 && (
@@ -120,12 +120,12 @@ export default function DashboardPage() {
               />
             ) : (
               <GlassCard>
-                <div className="p-6 border-b border-white/10">
+                <div className="p-6 border-b border-slate-200 dark:border-white/10">
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600">
                       <Users className="w-5 h-5 text-white" />
                     </div>
-                    <h2 className="text-lg font-semibold text-white">
+                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                       Por Departamento
                     </h2>
                   </div>
@@ -134,14 +134,14 @@ export default function DashboardPage() {
                   {departments.map((dept) => (
                     <div key={dept.name} className="group">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-white/70 group-hover:text-white transition-colors">
+                        <span className="text-sm font-medium text-slate-600 dark:text-white/70 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                           {dept.name}
                         </span>
-                        <span className="text-sm font-semibold text-white">
+                        <span className="text-sm font-semibold text-slate-900 dark:text-white">
                           {dept.count}
                         </span>
                       </div>
-                      <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-2 bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden">
                         <div
                           className={cn(
                             "h-full rounded-full bg-gradient-to-r",

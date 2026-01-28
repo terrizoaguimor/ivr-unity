@@ -5,9 +5,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDuration(seconds: number): string {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
+export function formatDuration(seconds: number | undefined | null): string {
+  if (seconds === undefined || seconds === null || isNaN(seconds)) {
+    return "0:00";
+  }
+  const totalSeconds = Math.max(0, Math.floor(seconds));
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 

@@ -2,7 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light Theme Variables */
 :root {
+  /* Background layers */
+  --bg-base: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f1f5f9;
+
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --text-muted: #94a3b8;
+
+  /* Borders */
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-default: rgba(0, 0, 0, 0.10);
+  --border-strong: rgba(0, 0, 0, 0.20);
+
+  /* Glass */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+
+  /* Accents */
+  --accent-primary: #6366f1;
+  --accent-secondary: #0ea5e9;
+  --accent-success: #22c55e;
+  --accent-warning: #f59e0b;
+  --accent-danger: #ef4444;
+}
+
+/* Dark Theme Variables */
+.dark {
   /* Background layers */
   --bg-base: #0f172a;
   --bg-surface: #1e293b;
@@ -19,7 +50,11 @@
   --border-default: rgba(255, 255, 255, 0.10);
   --border-strong: rgba(255, 255, 255, 0.20);
 
-  /* Accents */
+  /* Glass */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+
+  /* Accents remain same */
   --accent-primary: #6366f1;
   --accent-secondary: #22d3ee;
   --accent-success: #22c55e;
@@ -46,30 +81,44 @@
   }
 
   body {
-    @apply bg-slate-950 text-white antialiased;
+    background: var(--bg-base);
+    color: var(--text-primary);
   }
 }
 
 @layer components {
-  /* Glassmorphism Cards */
+  /* Glassmorphism Cards - Light Mode */
   .glass {
-    @apply bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl;
+    @apply bg-white/70 dark:bg-white/10 backdrop-blur-xl
+           border border-black/10 dark:border-white/20 rounded-2xl;
   }
 
   .glass-card {
-    @apply glass shadow-glass;
+    @apply glass shadow-lg shadow-black/5 dark:shadow-glass;
   }
 
   .glass-subtle {
-    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-xl;
+    @apply bg-white/50 dark:bg-white/5 backdrop-blur-md
+           border border-black/5 dark:border-white/10 rounded-xl;
   }
 
   .glass-inner {
-    @apply bg-white/5 border border-white/10 rounded-lg;
+    @apply bg-slate-100/80 dark:bg-white/5
+           border border-black/5 dark:border-white/10 rounded-lg;
   }
 
   /* Gradient Backgrounds */
   .gradient-mesh {
+    background:
+      radial-gradient(at 40% 20%, theme(colors.indigo.500/30) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, theme(colors.cyan.400/30) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, theme(colors.purple.500/30) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, theme(colors.pink.500/30) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, theme(colors.blue.500/30) 0px, transparent 50%),
+      theme(colors.slate.50);
+  }
+
+  .dark .gradient-mesh {
     background:
       radial-gradient(at 40% 20%, theme(colors.indigo.500) 0px, transparent 50%),
       radial-gradient(at 80% 0%, theme(colors.cyan.400) 0px, transparent 50%),
@@ -81,85 +130,99 @@
 
   .gradient-dark {
     background: linear-gradient(180deg,
+      theme(colors.slate.100) 0%,
+      theme(colors.slate.200) 50%,
+      theme(colors.slate.100) 100%
+    );
+  }
+
+  .dark .gradient-dark {
+    background: linear-gradient(180deg,
       #0c1445 0%,
       #1e3a5f 50%,
       #0a192f 100%
     );
   }
 
-  .gradient-purple {
-    background: linear-gradient(135deg,
-      #1a0533 0%,
-      #2d1b69 25%,
-      #6366f1 50%,
-      #38bdf8 75%,
-      #0f172a 100%
-    );
-    background-size: 400% 400%;
-  }
-
   /* Gradient Text */
   .gradient-text {
-    @apply bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600
+           dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400
+           bg-clip-text text-transparent;
   }
 
   /* Glass Inputs */
   .glass-input {
     @apply w-full px-4 py-3 rounded-xl
-           bg-white/5 backdrop-blur-sm
-           border border-white/20
-           text-white placeholder-white/40
+           bg-white dark:bg-white/5 backdrop-blur-sm
+           border border-slate-200 dark:border-white/20
+           text-slate-900 dark:text-white
+           placeholder-slate-400 dark:placeholder-white/40
            outline-none transition-all duration-300
-           focus:bg-white/10 focus:border-white/40
-           focus:ring-2 focus:ring-purple-500/30;
+           focus:bg-slate-50 dark:focus:bg-white/10
+           focus:border-indigo-500 dark:focus:border-white/40
+           focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-purple-500/30;
   }
 
   /* Glass Buttons */
   .glass-btn {
     @apply relative inline-flex items-center justify-center rounded-xl font-medium
            transition-all duration-300 ease-out backdrop-blur-md
-           bg-white/10 border border-white/20
-           hover:bg-white/20 hover:border-white/30
-           text-white;
+           bg-white/80 dark:bg-white/10
+           border border-slate-200 dark:border-white/20
+           hover:bg-slate-50 dark:hover:bg-white/20
+           hover:border-slate-300 dark:hover:border-white/30
+           text-slate-900 dark:text-white;
   }
 
   .glass-btn-primary {
     @apply glass-btn
-           bg-gradient-to-r from-indigo-500/80 to-purple-500/80
-           hover:from-indigo-500/90 hover:to-purple-500/90
-           shadow-lg shadow-purple-500/25;
+           bg-gradient-to-r from-indigo-500 to-purple-500
+           hover:from-indigo-600 hover:to-purple-600
+           border-transparent text-white
+           shadow-lg shadow-indigo-500/25;
   }
 
   /* Sidebar Link */
   .sidebar-link {
     @apply flex items-center gap-3 px-4 py-3 rounded-xl
-           text-white/70 transition-all duration-200
-           hover:bg-white/10 hover:text-white;
+           text-slate-600 dark:text-white/70 transition-all duration-200
+           hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white;
   }
 
   .sidebar-link.active {
-    @apply bg-indigo-500/20 text-white border border-indigo-500/30;
+    @apply bg-indigo-50 dark:bg-indigo-500/20
+           text-indigo-600 dark:text-white
+           border border-indigo-200 dark:border-indigo-500/30;
   }
 
   /* Status Badges */
   .badge-success {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
-           bg-emerald-500/20 text-emerald-400 border border-emerald-500/30;
+           bg-emerald-100 dark:bg-emerald-500/20
+           text-emerald-700 dark:text-emerald-400
+           border border-emerald-200 dark:border-emerald-500/30;
   }
 
   .badge-warning {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
-           bg-amber-500/20 text-amber-400 border border-amber-500/30;
+           bg-amber-100 dark:bg-amber-500/20
+           text-amber-700 dark:text-amber-400
+           border border-amber-200 dark:border-amber-500/30;
   }
 
   .badge-danger {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
-           bg-red-500/20 text-red-400 border border-red-500/30;
+           bg-red-100 dark:bg-red-500/20
+           text-red-700 dark:text-red-400
+           border border-red-200 dark:border-red-500/30;
   }
 
   .badge-info {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
-           bg-blue-500/20 text-blue-400 border border-blue-500/30;
+           bg-blue-100 dark:bg-blue-500/20
+           text-blue-700 dark:text-blue-400
+           border border-blue-200 dark:border-blue-500/30;
   }
 
   /* Stats Card */
@@ -172,18 +235,8 @@
     @apply absolute top-0 left-0 right-0 h-px;
     background: linear-gradient(90deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.4) 50%,
+      rgba(99, 102, 241, 0.4) 50%,
       transparent 100%
-    );
-  }
-
-  .stat-card::after {
-    content: '';
-    @apply absolute inset-0 pointer-events-none;
-    background: radial-gradient(
-      ellipse at 50% 0%,
-      rgba(99, 102, 241, 0.15) 0%,
-      transparent 60%
     );
   }
 
@@ -206,23 +259,25 @@
   }
 
   .glass-table thead {
-    @apply border-b border-white/10;
+    @apply border-b border-slate-200 dark:border-white/10;
   }
 
   .glass-table th {
-    @apply px-6 py-4 text-left text-xs font-semibold text-white/60 uppercase tracking-wider;
+    @apply px-6 py-4 text-left text-xs font-semibold
+           text-slate-500 dark:text-white/60 uppercase tracking-wider;
   }
 
   .glass-table td {
-    @apply px-6 py-4 text-sm text-white/80;
+    @apply px-6 py-4 text-sm text-slate-700 dark:text-white/80;
   }
 
   .glass-table tbody tr {
-    @apply border-b border-white/5 transition-colors hover:bg-white/5;
+    @apply border-b border-slate-100 dark:border-white/5
+           transition-colors hover:bg-slate-50 dark:hover:bg-white/5;
   }
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Light */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -233,11 +288,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-white/20 rounded-full;
+  @apply bg-slate-300 dark:bg-white/20 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-white/30;
+  @apply bg-slate-400 dark:bg-white/30;
 }
 
 /* Pulse animation for active calls */
@@ -293,4 +348,20 @@
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out forwards;
   opacity: 0;
+}
+
+/* Slide In Animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.4s ease-out forwards;
 }

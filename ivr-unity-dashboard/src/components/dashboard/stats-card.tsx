@@ -41,15 +41,25 @@ export function StatsCard({
     cyan: "shadow-cyan-500/20",
   };
 
+  const bgGlowColors = {
+    blue: "bg-blue-500/20 dark:bg-blue-500/30",
+    green: "bg-emerald-500/20 dark:bg-emerald-500/30",
+    yellow: "bg-amber-500/20 dark:bg-amber-500/30",
+    red: "bg-rose-500/20 dark:bg-rose-500/30",
+    purple: "bg-purple-500/20 dark:bg-purple-500/30",
+    cyan: "bg-cyan-500/20 dark:bg-cyan-500/30",
+  };
+
   return (
     <div
       className={cn(
         "relative overflow-hidden rounded-2xl",
-        "bg-white/5 backdrop-blur-xl",
-        "border border-white/10",
+        "bg-white dark:bg-white/5 backdrop-blur-xl",
+        "border border-slate-200 dark:border-white/10",
         "p-6 transition-all duration-300",
-        "hover:bg-white/10 hover:border-white/20",
-        "hover:shadow-lg hover:shadow-black/20",
+        "hover:bg-slate-50 dark:hover:bg-white/10",
+        "hover:border-slate-300 dark:hover:border-white/20",
+        "hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20",
         "group animate-fadeIn"
       )}
       style={{ animationDelay: `${index * 100}ms` }}
@@ -57,19 +67,18 @@ export function StatsCard({
       {/* Background glow effect */}
       <div
         className={cn(
-          "absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-20",
-          "bg-gradient-to-br",
-          gradients[color],
-          "group-hover:opacity-30 transition-opacity duration-500"
+          "absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-30 dark:opacity-20",
+          bgGlowColors[color],
+          "group-hover:opacity-50 dark:group-hover:opacity-30 transition-opacity duration-500"
         )}
       />
 
       <div className="relative flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-white/60">
+          <p className="text-sm font-medium text-slate-500 dark:text-white/60">
             {title}
           </p>
-          <p className="mt-2 text-3xl font-bold text-white tracking-tight">
+          <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             {value}
           </p>
           {trend && (
@@ -78,8 +87,8 @@ export function StatsCard({
                 className={cn(
                   "flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium",
                   trend.value >= 0
-                    ? "bg-emerald-500/20 text-emerald-400"
-                    : "bg-rose-500/20 text-rose-400"
+                    ? "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400"
+                    : "bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400"
                 )}
               >
                 {trend.value >= 0 ? (
@@ -92,7 +101,7 @@ export function StatsCard({
                   {trend.value}%
                 </span>
               </div>
-              <span className="text-xs text-white/40">
+              <span className="text-xs text-slate-400 dark:text-white/40">
                 {trend.label}
               </span>
             </div>
@@ -117,7 +126,7 @@ export function StatsCard({
       <div
         className={cn(
           "absolute bottom-0 left-0 right-0 h-px",
-          "bg-gradient-to-r from-transparent via-white/20 to-transparent"
+          "bg-gradient-to-r from-transparent via-slate-200 dark:via-white/20 to-transparent"
         )}
       />
     </div>

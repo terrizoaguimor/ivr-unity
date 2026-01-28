@@ -60,7 +60,7 @@ export default function CallsPage() {
                   "px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200",
                   filter === item.key
                     ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30"
-                    : "bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
+                    : "bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/70 hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white"
                 )}
               >
                 <span className="flex items-center gap-2">
@@ -93,13 +93,13 @@ export default function CallsPage() {
           {/* Call List */}
           <div className="lg:col-span-2">
             <GlassCard className="overflow-hidden">
-              <div className="p-6 border-b border-white/10">
+              <div className="p-6 border-b border-slate-200 dark:border-white/10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600">
                       <Phone className="w-5 h-5 text-white" />
                     </div>
-                    <h2 className="text-lg font-semibold text-white">
+                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                       Lista de Llamadas
                     </h2>
                   </div>
@@ -128,44 +128,44 @@ export default function CallsPage() {
                 />
               ) : (
                 <GlassCard>
-                  <div className="p-6 border-b border-white/10">
-                    <h2 className="text-lg font-semibold text-white">
+                  <div className="p-6 border-b border-slate-200 dark:border-white/10">
+                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                       Detalles de Llamada
                     </h2>
                   </div>
                   <div className="p-6 space-y-5">
                     <div>
-                      <p className="text-sm text-white/50 mb-1">Llamante</p>
-                      <p className="font-medium text-white">
+                      <p className="text-sm text-slate-500 dark:text-white/50 mb-1">Llamante</p>
+                      <p className="font-medium text-slate-900 dark:text-white">
                         {selectedCall.caller}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-white/50 mb-1">Estado</p>
+                      <p className="text-sm text-slate-500 dark:text-white/50 mb-1">Estado</p>
                       <Badge variant={selectedCall.status === "completed" ? "success" : "error"}>
                         {selectedCall.status}
                       </Badge>
                     </div>
                     {selectedCall.department && (
                       <div>
-                        <p className="text-sm text-white/50 mb-1">Departamento</p>
-                        <p className="font-medium text-white">
+                        <p className="text-sm text-slate-500 dark:text-white/50 mb-1">Departamento</p>
+                        <p className="font-medium text-slate-900 dark:text-white">
                           {selectedCall.department}
                         </p>
                       </div>
                     )}
                     {selectedCall.duration !== undefined && (
                       <div>
-                        <p className="text-sm text-white/50 mb-1">Duración</p>
-                        <p className="font-medium text-white">
+                        <p className="text-sm text-slate-500 dark:text-white/50 mb-1">Duración</p>
+                        <p className="font-medium text-slate-900 dark:text-white">
                           {Math.floor(selectedCall.duration / 60)}:{(selectedCall.duration % 60).toString().padStart(2, "0")}
                         </p>
                       </div>
                     )}
                     {selectedCall.transferredTo && (
                       <div>
-                        <p className="text-sm text-white/50 mb-1">Transferida a</p>
-                        <p className="font-medium text-white">
+                        <p className="text-sm text-slate-500 dark:text-white/50 mb-1">Transferida a</p>
+                        <p className="font-medium text-slate-900 dark:text-white">
                           {selectedCall.transferredTo}
                         </p>
                       </div>
@@ -183,7 +183,7 @@ export default function CallsPage() {
               )
             ) : (
               <GlassCard>
-                <div className="flex flex-col items-center justify-center py-16 text-white/40">
+                <div className="flex flex-col items-center justify-center py-16 text-slate-400 dark:text-white/40">
                   <Phone className="w-16 h-16 mb-4 opacity-30" />
                   <p className="text-center">
                     Selecciona una llamada para ver sus detalles
