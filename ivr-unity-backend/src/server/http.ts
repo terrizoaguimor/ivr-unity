@@ -16,16 +16,18 @@ export function createHttpServer(): Application {
 
   // Request logging
   app.use((req: Request, res: Response, next: NextFunction) => {
-    logger.debug('HTTP request', {
+    logger.info('HTTP request', {
       method: req.method,
       path: req.path,
-      ip: req.ip,
+      url: req.url,
+      originalUrl: req.originalUrl,
     });
     next();
   });
 
   // Health check endpoint
   app.get('/health', (req: Request, res: Response) => {
+    logger.info('Health check requested');
     res.json({
       status: 'healthy',
       version: '1.0.0',
