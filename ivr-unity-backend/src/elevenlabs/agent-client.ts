@@ -134,23 +134,11 @@ export class ElevenLabsAgentClient extends EventEmitter {
   private sendInitialConfig(): void {
     if (!this.ws || !this.isConnected) return;
 
-    // Send conversation initiation with correct voice/model configuration
+    // Send conversation initiation WITHOUT overrides
+    // Agent is fully configured via API with prompt, voice, model, and language
     const initMessage = {
       type: 'conversation_initiation_client_data',
       conversation_initiation_client_data: {
-        conversation_config_override: {
-          agent: {
-            prompt: {
-              prompt: this.getSystemPrompt(),
-            },
-            first_message: 'Bienvenido a Unity Financial Network, Great Deals, Greater Trust. ¿En qué puedo ayudarle hoy?',
-            language: 'es',
-          },
-          tts: {
-            voice_id: 'fLBIPozdalGjWI2TZRy2', // Martín Tuiran (Latin American Spanish)
-            model_id: 'eleven_multilingual_v2',
-          },
-        },
         custom_llm_extra_body: {
           call_id: this.callId,
         },
@@ -158,7 +146,7 @@ export class ElevenLabsAgentClient extends EventEmitter {
     };
 
     this.ws.send(JSON.stringify(initMessage));
-    this.callLogger.debug('Sent initial config to agent');
+    this.callLogger.debug('Sent initial config to agent (no overrides)');
   }
 
   /**
