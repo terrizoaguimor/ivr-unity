@@ -62,17 +62,24 @@ async function handleNewConnection(
     ws.close();
   }, 10000);
 
-  ws.once('message', async (data: WebSocket.Data) => {
-    clearTimeout(startTimeout);
-
+  const messageHandler = async (data: WebSocket.Data) => {
     try {
       const event = JSON.parse(data.toString());
 
-      if (event.event !== 'start') {
-        logger.warn('First message was not start event', { event: event.event });
-        ws.close();
+      // Ignore 'connected' event, wait for 'start'
+      if (event.event === 'connected') {
+        logger.debug('WebSocket connected event received');
         return;
       }
+
+      if (event.event !== 'start') {
+        logger.warn('Unexpected event before start', { event: event.event });
+        return;
+      }
+
+      // Remove listener after receiving 'start'
+      ws.off('message', messageHandler);
+      clearTimeout(startTimeout);
 
       const { callSid, customParameters } = event.start;
       const caller = customParameters?.caller || 'unknown';
@@ -134,7 +141,9 @@ async function handleNewConnection(
       logger.error('Failed to handle start event', { error });
       ws.close();
     }
-  });
+  };
+
+  ws.on('message', messageHandler);
 
   ws.on('close', (code, reason) => {
     clearTimeout(startTimeout);
