@@ -249,6 +249,7 @@ export class TwilioAudioBridge extends EventEmitter {
       event: 'media',
       streamSid: this.streamSid,
       media: {
+        track: 'outbound',
         payload: mulawAudio.toString('base64'),
       },
     };
