@@ -145,8 +145,15 @@ export class ElevenLabsAgentClient extends EventEmitter {
       },
     };
 
-    this.ws.send(JSON.stringify(initMessage));
-    this.callLogger.debug('Sent initial config to agent (no overrides)');
+    try {
+      this.ws.send(JSON.stringify(initMessage));
+      this.callLogger.info('Sent conversation initiation', {
+        messageType: initMessage.type,
+        hasCallId: !!this.callId
+      });
+    } catch (error) {
+      this.callLogger.error('Failed to send init config', { error });
+    }
   }
 
   /**
@@ -210,6 +217,12 @@ Recuerda: eres la primera impresión de Unity Financial. Sé eficiente pero nunc
     try {
       const message: ElevenLabsMessage = JSON.parse(data.toString());
 
+      // Log ALL incoming messages for debugging
+      this.callLogger.debug('ElevenLabs message received', {
+        type: message.type,
+        keys: Object.keys(message)
+      });
+
       switch (message.type) {
         case 'audio':
           this.handleAudio(message as unknown as AudioMessage);
@@ -241,10 +254,16 @@ Recuerda: eres la primera impresión de Unity Financial. Sé eficiente pero nunc
           break;
 
         default:
-          this.callLogger.debug('Unknown message type', { type: message.type });
+          this.callLogger.warn('Unknown message type from ElevenLabs', {
+            type: message.type,
+            message: JSON.stringify(message).substring(0, 200)
+          });
       }
     } catch (error) {
-      this.callLogger.error('Failed to parse message', { error });
+      this.callLogger.error('Failed to parse ElevenLabs message', {
+        error,
+        data: data.toString().substring(0, 500)
+      });
     }
   }
 
@@ -327,7 +346,18 @@ Recuerda: eres la primera impresión de Unity Financial. Sé eficiente pero nunc
       user_audio_chunk: audioData.toString('base64'),
     };
 
-    this.ws.send(JSON.stringify(message));
+    try {
+      this.ws.send(JSON.stringify(message));
+      // Log first audio chunk for debugging
+      if (Math.random() < 0.01) { // Log 1% of audio chunks
+        this.callLogger.debug('Sent audio chunk', {
+          size: audioData.length,
+          base64Length: message.user_audio_chunk.length
+        });
+      }
+    } catch (error) {
+      this.callLogger.error('Failed to send audio', { error });
+    }
   }
 
   /**
