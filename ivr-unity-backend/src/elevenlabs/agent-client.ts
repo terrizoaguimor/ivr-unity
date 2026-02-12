@@ -134,7 +134,7 @@ export class ElevenLabsAgentClient extends EventEmitter {
   private sendInitialConfig(): void {
     if (!this.ws || !this.isConnected) return;
 
-    // Send conversation initiation with metadata
+    // Send conversation initiation with correct voice/model configuration
     const initMessage = {
       type: 'conversation_initiation_client_data',
       conversation_initiation_client_data: {
@@ -143,12 +143,12 @@ export class ElevenLabsAgentClient extends EventEmitter {
             prompt: {
               prompt: this.getSystemPrompt(),
             },
-            first_message: 'Bienvenido a Unity Financial. ¿En qué puedo ayudarle hoy?',
+            first_message: 'Bienvenido a Unity Financial Network, Great Deals, Greater Trust. ¿En qué puedo ayudarle hoy?',
             language: 'es',
           },
           tts: {
-            voice_id: 'EXAVITQu4vr4xnSDxMaL', // Rachel voice
-            model_id: 'eleven_flash_v2_5',
+            voice_id: 'fLBIPozdalGjWI2TZRy2', // Martín Tuiran (Latin American Spanish)
+            model_id: 'eleven_multilingual_v2',
           },
         },
         custom_llm_extra_body: {
