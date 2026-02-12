@@ -3,6 +3,11 @@ import { handleTelnyxVoiceWebhook, validateTelnyxSignature } from '../telephony/
 import { sessionManager } from '../bridge/call-session';
 import { config } from '../config';
 import { logger } from '../utils/logger';
+import {
+  handleBuscarCliente,
+  handleGuardarContexto,
+  handleCrearSiniestro,
+} from './elevenlabs-webhooks';
 
 /**
  * Create and configure Express application
@@ -70,6 +75,19 @@ export function createHttpServer(): Application {
     logger.info('Telnyx status callback', { body: req.body });
     res.status(200).send();
   });
+
+  // ========================================
+  // ElevenLabs Webhook Endpoints (P&C MOCK)
+  // ========================================
+
+  // Buscar cliente por teléfono
+  app.get('/api/elevenlabs/buscar-cliente', handleBuscarCliente);
+
+  // Guardar contexto antes de transferencia
+  app.post('/api/elevenlabs/guardar-contexto', handleGuardarContexto);
+
+  // Crear siniestro (FUTURO)
+  app.post('/api/elevenlabs/crear-siniestro', handleCrearSiniestro);
 
   // Session info endpoint (for debugging)
   app.get('/sessions', (req: Request, res: Response) => {

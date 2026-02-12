@@ -14,6 +14,13 @@ services:
     http_port: 3000
     instance_count: 1
     instance_size_slug: apps-s-1vcpu-1gb
+    routes:
+      - path: /telnyx
+        preserve_path_prefix: true
+      - path: /stream
+        preserve_path_prefix: true
+      - path: /health
+        preserve_path_prefix: true
     health_check:
       http_path: /health
       initial_delay_seconds: 20
@@ -34,18 +41,23 @@ services:
       - key: TELNYX_API_KEY
         scope: RUN_TIME
         type: SECRET
+        value: "KEY019C02198905775761880166D9BE5825_lzDW4IvyRa7WmsIKaNvgUD"
       - key: TELNYX_PUBLIC_KEY
         scope: RUN_TIME
         type: SECRET
+        value: "2B78EeckMuSxSvpcq6D2sUG/UAlh/i57yZguvDTU/Mg="
       - key: TELNYX_CONNECTION_ID
         scope: RUN_TIME
         type: SECRET
+        value: "mock_connection_id"
       - key: ELEVENLABS_API_KEY
         scope: RUN_TIME
         type: SECRET
+        value: "sk_dd91fb09de472750ce3e99df73978cdff4f2614f7d6c1cd9"
       - key: ELEVENLABS_AGENT_ID
         scope: RUN_TIME
         type: SECRET
+        value: "agent_4801kg64ffw3f4q8vdytf5j7yz85"
 
   # Dashboard Frontend (Next.js with Glassmorphism UI)
   - name: ivr-dashboard
@@ -54,11 +66,13 @@ services:
       branch: main
       deploy_on_push: true
     source_dir: ivr-unity-dashboard
-    build_command: npm install && npm run build
-    run_command: npm start
+    build_command: npm install && npm run build && cp -r public .next/standalone/ 2>/dev/null || true && cp -r .next/static .next/standalone/.next/
+    run_command: node .next/standalone/server.js
     http_port: 3000
     instance_count: 1
     instance_size_slug: apps-s-1vcpu-1gb
+    routes:
+      - path: /
     health_check:
       http_path: /
       initial_delay_seconds: 30
@@ -76,43 +90,20 @@ services:
       - key: ELEVENLABS_API_KEY
         scope: RUN_TIME
         type: SECRET
+        value: "sk_dd91fb09de472750ce3e99df73978cdff4f2614f7d6c1cd9"
       - key: ELEVENLABS_AGENT_ID
         scope: RUN_TIME
         type: SECRET
-      - key: JWT_SECRET
+        value: "agent_4801kg64ffw3f4q8vdytf5j7yz85"
+      - key: AUTH_SECRET
         scope: RUN_TIME
         type: SECRET
-      - key: HTPASSWD_USER
+        value: "ivr-unity-jwt-secret-2024"
+      - key: ADMIN_USERNAME
         scope: RUN_TIME
         type: SECRET
-      - key: HTPASSWD_PASS
+        value: "unity"
+      - key: ADMIN_PASSWORD
         scope: RUN_TIME
         type: SECRET
-
-ingress:
-  rules:
-    - component:
-        name: ivr-dashboard
-      match:
-        path:
-          prefix: /
-    - component:
-        name: ivr-backend
-      match:
-        path:
-          prefix: /api
-    - component:
-        name: ivr-backend
-      match:
-        path:
-          prefix: /telnyx
-    - component:
-        name: ivr-backend
-      match:
-        path:
-          prefix: /stream
-    - component:
-        name: ivr-backend
-      match:
-        path:
-          prefix: /health
+        value: "UnityIVR2024"
