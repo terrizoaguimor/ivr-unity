@@ -1,5 +1,5 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
-import { handleTelnyxVoiceWebhook, validateTelnyxSignature } from '../telephony/telnyx-handler';
+import { handleTwilioVoiceWebhook, handleTwilioStatusCallback, validateTwilioSignature } from '../telephony/twilio-handler';
 import { sessionManager } from '../bridge/call-session';
 import { config } from '../config';
 import { logger } from '../utils/logger';
@@ -8,6 +8,15 @@ import {
   handleGuardarContexto,
   handleCrearSiniestro,
 } from './elevenlabs-webhooks';
+import {
+  getWolkvoxStatus,
+  getActiveCalls,
+  forceTransfer,
+  getAgents,
+  getSkills,
+  startOrchestrator,
+  stopOrchestrator,
+} from './wolkvox-routes';
 
 /**
  * Create and configure Express application
@@ -58,22 +67,21 @@ export function createHttpServer(): Application {
     }
   });
 
-  // Telnyx voice webhook
-  app.post('/telnyx/voice', (req: Request, res: Response) => {
+  // Twilio voice webhook
+  app.post('/twilio/voice', (req: Request, res: Response) => {
     // Validate signature in production
-    if (config.nodeEnv === 'production' && !validateTelnyxSignature(req)) {
-      logger.warn('Invalid Telnyx signature');
-      res.status(401).json({ error: 'Invalid signature' });
+    if (config.nodeEnv === 'production' && !validateTwilioSignature(req)) {
+      logger.warn('Invalid Twilio signature');
+      res.status(403).send('Forbidden');
       return;
     }
 
-    handleTelnyxVoiceWebhook(req, res);
+    handleTwilioVoiceWebhook(req, res);
   });
 
-  // Telnyx status callback (optional)
-  app.post('/telnyx/status', (req: Request, res: Response) => {
-    logger.info('Telnyx status callback', { body: req.body });
-    res.status(200).send();
+  // Twilio status callback (optional)
+  app.post('/twilio/status', (req: Request, res: Response) => {
+    handleTwilioStatusCallback(req, res);
   });
 
   // ========================================
@@ -88,6 +96,31 @@ export function createHttpServer(): Application {
 
   // Crear siniestro (FUTURO)
   app.post('/api/elevenlabs/crear-siniestro', handleCrearSiniestro);
+
+  // ========================================
+  // Wolkvox Control Endpoints
+  // ========================================
+
+  // Get orchestrator and Wolkvox status
+  app.get('/api/wolkvox/status', getWolkvoxStatus);
+
+  // Get active calls
+  app.get('/api/wolkvox/active-calls', getActiveCalls);
+
+  // Force transfer a call
+  app.post('/api/wolkvox/transfer', forceTransfer);
+
+  // Get real-time agents (query param: ?status=available|oncall)
+  app.get('/api/wolkvox/agents', getAgents);
+
+  // Get real-time skills/queues
+  app.get('/api/wolkvox/skills', getSkills);
+
+  // Start orchestrator
+  app.post('/api/wolkvox/start', startOrchestrator);
+
+  // Stop orchestrator
+  app.post('/api/wolkvox/stop', stopOrchestrator);
 
   // Session info endpoint (for debugging)
   app.get('/sessions', (req: Request, res: Response) => {

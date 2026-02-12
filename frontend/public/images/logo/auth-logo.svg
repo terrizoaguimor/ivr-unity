@@ -1,0 +1,26 @@
+<svg width="231" height="48" viewBox="0 0 231 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Unity Icon - U shape -->
+<path d="M0.425781 12.6316C0.425781 5.65535 6.08113 0 13.0574 0H35.7942C42.7704 0 48.4258 5.65535 48.4258 12.6316V35.3684C48.4258 42.3446 42.7704 48 35.7942 48H13.0574C6.08113 48 0.425781 42.3446 0.425781 35.3684V12.6316Z" fill="#512783"/>
+<g filter="url(#filter0_d_unity_auth)">
+<!-- U shape representing Unity -->
+<path d="M12.5 12C12.5 10.7574 13.5074 9.75 14.75 9.75H18.25C19.4926 9.75 20.5 10.7574 20.5 12V31.5C20.5 33.9853 22.5147 36 25 36C27.4853 36 29.5 33.9853 29.5 31.5V12C29.5 10.7574 30.5074 9.75 31.75 9.75H35.25C36.4926 9.75 37.5 10.7574 37.5 12V31.5C37.5 38.1274 32.1274 43.5 25.5 43.5C18.8726 43.5 13.5 38.1274 13.5 31.5V12Z" fill="white"/>
+</g>
+<!-- Text: Unity (white for dark backgrounds) -->
+<path d="M66 29.25V11H71.65V28.85C71.65 33.6 74 35.8 78.4 35.8C82.8 35.8 85.15 33.6 85.15 28.85V11H90.8V29.25C90.8 35.55 86.85 39 78.4 39C69.95 39 66 35.55 66 29.25Z" fill="white"/>
+<path d="M99.3 38.55V19.35H104.15L104.45 22.05C105.65 19.95 108.05 18.9 111.15 18.9C116.35 18.9 119.2 22.2 119.2 27.75V38.55H114.2V28.5C114.2 25.05 112.6 23.25 109.55 23.25C106.1 23.25 104.3 25.65 104.3 29.1V38.55H99.3Z" fill="white"/>
+<path d="M127.1 15.9C125.3 15.9 123.9 14.5 123.9 12.7C123.9 11 125.3 9.6 127.1 9.6C128.9 9.6 130.3 11 130.3 12.7C130.3 14.5 128.9 15.9 127.1 15.9ZM124.55 38.55V19.35H129.55V38.55H124.55Z" fill="white"/>
+<path d="M139.25 38.55V23H134.35V19.35H139.25V16.45C139.25 12.1 142.35 9.5 147.55 9.5V13.1C144.95 13.1 144.25 14.15 144.25 16.45V19.35H149.2V23H144.25V38.55H139.25Z" fill="white"/>
+<path d="M152.6 48V44.4H154.55C156.7 44.4 157.8 43.5 158.65 41.4L159.2 40L150.35 19.35H155.6L162.1 35.25L168.4 19.35H173.55L164.55 42.55C162.8 47.25 160.5 48 156.4 48H152.6Z" fill="white"/>
+<defs>
+<filter id="filter0_d_unity_auth" x="11.5" y="9.25" width="27" height="35.75" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="0.5"/>
+<feGaussianBlur stdDeviation="0.5"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+</defs>
+</svg>

@@ -9,6 +9,9 @@ dist/
 .env.local
 .env.*.local
 
+# DigitalOcean App Spec with secrets
+.do/app.yaml
+
 # Logs
 logs/
 *.log

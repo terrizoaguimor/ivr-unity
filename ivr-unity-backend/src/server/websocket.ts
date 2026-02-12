@@ -1,12 +1,26 @@
 import { Server as HttpServer } from 'http';
 import WebSocket, { WebSocketServer } from 'ws';
 import { parse as parseUrl } from 'url';
-import { AudioBridge } from '../bridge/audio-bridge';
+import { TwilioAudioBridge } from '../bridge/twilio-audio-bridge';
 import { sessionManager } from '../bridge/call-session';
 import { logger } from '../utils/logger';
+import { WolkvoxClient } from '../wolkvox/wolkvox-client';
+import { WolkvoxCallHandler } from '../wolkvox/wolkvox-call-handler';
+import { config } from '../config';
+
+// Store Wolkvox client instance
+let wolkvoxClientInstance: WolkvoxClient | null = null;
 
 /**
- * Create WebSocket server for Telnyx audio streaming
+ * Initialize Wolkvox client for WebSocket server
+ */
+export function initializeWolkvoxClient(client: WolkvoxClient): void {
+  wolkvoxClientInstance = client;
+  logger.info('Wolkvox client initialized in WebSocket server');
+}
+
+/**
+ * Create WebSocket server for Twilio audio streaming
  */
 export function createWebSocketServer(httpServer: HttpServer): WebSocketServer {
   const wss = new WebSocketServer({
@@ -36,7 +50,7 @@ export function createWebSocketServer(httpServer: HttpServer): WebSocketServer {
 }
 
 /**
- * Handle new WebSocket connection from Telnyx
+ * Handle new WebSocket connection from Twilio
  */
 async function handleNewConnection(
   ws: WebSocket,
@@ -60,48 +74,60 @@ async function handleNewConnection(
         return;
       }
 
-      const { call_control_id, custom_parameters } = event.start;
-      const caller = custom_parameters?.caller || 'unknown';
-      const calledNumber = custom_parameters?.called_number;
+      const { callSid, customParameters } = event.start;
+      const caller = customParameters?.caller || 'unknown';
+      const calledNumber = customParameters?.calledNumber || config.twilio.phoneNumber;
 
       logger.info('Stream started', {
-        callId: call_control_id,
+        callSid,
         caller,
         calledNumber,
       });
 
       // Create session
       const session = sessionManager.createSession(
-        call_control_id,
+        callSid,
         caller,
         calledNumber
       );
 
-      // Create and start audio bridge
-      const bridge = new AudioBridge(ws, session);
+      // Create audio bridge
+      const bridge = new TwilioAudioBridge(ws, session);
+
+      // Create Wolkvox handler if client is available
+      let wolkvoxHandler: WolkvoxCallHandler | null = null;
+      if (wolkvoxClientInstance) {
+        wolkvoxHandler = new WolkvoxCallHandler(
+          session,
+          wolkvoxClientInstance,
+          caller
+        );
+        wolkvoxHandler.attachBridge(bridge);
+        logger.info('Wolkvox handler attached', { callSid });
+      }
 
       bridge.on('userTranscript', (text: string) => {
-        logger.info('User said', { callId: call_control_id, text });
+        logger.info('User said', { callSid, text });
       });
 
       bridge.on('agentResponse', (text: string) => {
-        logger.info('Agent said', { callId: call_control_id, text });
+        logger.info('Agent said', { callSid, text });
       });
 
       bridge.on('transfer', (department: string, reason?: string) => {
-        logger.info('Transfer initiated', { callId: call_control_id, department, reason });
-        // In a real implementation, you would use Telnyx Call Control API
-        // to transfer the call to the appropriate queue
+        logger.info('Transfer initiated', { callSid, department, reason });
+        // TODO: Implement Twilio call transfer to Wolkvox number
+        // For now, just log - Wolkvox handler will log the interaction
       });
 
       bridge.on('stopped', () => {
-        logger.info('Bridge stopped', { callId: call_control_id });
+        logger.info('Bridge stopped', { callSid });
       });
 
       try {
         await bridge.start();
       } catch (error) {
-        logger.error('Failed to start bridge', { callId: call_control_id, error });
+        logger.error('Failed to start bridge', { callSid, error });
         ws.close();
       }
     } catch (error) {

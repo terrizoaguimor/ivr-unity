@@ -8,10 +8,11 @@ export const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
   logLevel: process.env.LOG_LEVEL || 'info',
 
-  // Telnyx
-  telnyx: {
-    apiKey: process.env.TELNYX_API_KEY || '',
-    publicKey: process.env.TELNYX_PUBLIC_KEY || '',
+  // Twilio
+  twilio: {
+    accountSid: process.env.TWILIO_ACCOUNT_SID || '',
+    authToken: process.env.TWILIO_AUTH_TOKEN || '',
+    phoneNumber: process.env.TWILIO_PHONE_NUMBER || '',
   },
 
   // ElevenLabs
@@ -27,6 +28,22 @@ export const config = {
     elevenLabsSampleRate: 16000,
     telnyxCodec: 'PCMU', // μ-law
     elevenLabsFormat: 'pcm_16000', // 16-bit PCM at 16kHz
+  },
+
+  // Wolkvox
+  wolkvox: {
+    server: process.env.WOLKVOX_SERVER || '0048',
+    token: process.env.WOLKVOX_TOKEN || '',
+    baseUrl: process.env.WOLKVOX_BASE_URL,
+    pollingIntervalMs: parseInt(process.env.WOLKVOX_POLLING_INTERVAL || '5000', 10),
+    defaultSkillId: process.env.WOLKVOX_DEFAULT_SKILL_ID,
+    maxCallDurationMs: parseInt(process.env.WOLKVOX_MAX_CALL_DURATION || '300000', 10), // 5 minutos por defecto
+    sip: {
+      username: process.env.WOLKVOX_SIP_USERNAME || 'inb-unity-elevenlabs',
+      password: process.env.WOLKVOX_SIP_PASSWORD || '',
+      host: process.env.WOLKVOX_SIP_HOST || '',
+      transport: (process.env.WOLKVOX_SIP_TRANSPORT || 'udp') as 'udp' | 'tcp',
+    },
   },
 
   // Queue mappings for transfers

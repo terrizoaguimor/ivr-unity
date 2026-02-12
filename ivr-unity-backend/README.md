@@ -1,36 +1,59 @@
 # IVR Unity Backend
 
-Backend para el sistema IVR conversacional de Unity Financial usando Telnyx + ElevenLabs Conversational AI.
+Backend middleware para el sistema IVR conversacional de Unity Financial usando Wolkvox + Twilio + ElevenLabs Conversational AI.
 
 ## Arquitectura
 
 ```
 ┌──────────────┐    ┌─────────────────┐    ┌─────────────────────────────────┐
-│   Llamada    │───▶│     Telnyx      │───▶│     Node.js Backend (DO)        │
-│   Entrante   │    │   SIP Trunk     │    │                                  │
-└──────────────┘    │   + TeXML       │    │  ┌────────────────────────────┐  │
-                    └────────┬────────┘    │  │    Audio Bridge            │  │
-                             │             │  │    (Telnyx ↔ ElevenLabs)   │  │
-                             │ Audio       │  └─────────────┬──────────────┘  │
-                             │ Stream      │                │                  │
-                             │ (WS)        │                ▼                  │
-                             ▼             │  ┌────────────────────────────┐  │
+│   Llamada    │───▶│    Wolkvox      │───▶│     Twilio                      │
+│   Entrante   │    │  Contact Center │    │   +1 754 273 9829               │
+└──────────────┘    └─────────────────┘    └────────┬────────────────────────┘
+                                                     │ Transfer
+                                                     │ (TwiML)
+                                                     ▼
+                                           ┌─────────────────────────────────┐
+                                           │  Node.js Backend (DO)            │
+                                           │                                  │
+                                           │  ┌────────────────────────────┐  │
+                                           │  │    Audio Bridge            │  │
+                                           │  │    (Twilio ↔ ElevenLabs)   │  │
+                                           │  └─────────────┬──────────────┘  │
+                                           │                │                  │
+                                           │                ▼                  │
+                                           │  ┌────────────────────────────┐  │
                     ┌─────────────────┐    │  │  ElevenLabs Conversational │  │
-                    │  Telnyx         │◀──▶│  │  AI Agent (WebSocket)      │  │
-                    │  WebSocket      │    │  │                            │  │
+                    │  Twilio         │◀──▶│  │  AI Agent (Stefani)        │  │
+                    │  Media Stream   │    │  │                            │  │
                     └─────────────────┘    │  │  - STT integrado           │  │
-                                           │  │  - LLM (Claude/GPT)        │  │
+                                           │  │  - LLM reasoning           │  │
                                            │  │  - TTS integrado           │  │
-                                           │  │  - Tools/Functions         │  │
+                                           │  │  - Voice Tags V3           │  │
+                                           │  └────────────┬───────────────┘  │
+                                           │               │                   │
+                                           │  ┌────────────▼───────────────┐  │
+                                           │  │  Wolkvox API Integration   │  │
+                                           │  │  - Log interactions        │  │
+                                           │  │  - Agent status tracking   │  │
+                                           │  │  - Transfer coordination   │  │
                                            │  └────────────────────────────┘  │
                                            └─────────────────────────────────┘
+                                                     │ Transfer back
+                                                     ▼
+                                           ┌─────────────────────┐
+                                           │  Wolkvox Skills     │
+                                           │  - VQ_PYC_VENTAS    │
+                                           │  - VQ_PYC_SERVICIO  │
+                                           │  - VQ_PYC_SINIESTRO │
+                                           └─────────────────────┘
 ```
 
 ## Requisitos
 
-- Node.js 18+
-- Cuenta de Telnyx con número de teléfono
+- Node.js 20+
+- Cuenta de Twilio con número de teléfono (+1 754 273 9829)
 - Cuenta de ElevenLabs con Conversational AI Agent
+- Cuenta de Wolkvox con API access (Server 0048)
 
 ## Configuración
 
@@ -41,13 +64,27 @@ cp .env.example .env
 
 2. Configurar las variables de entorno:
 ```bash
-# Telnyx
-TELNYX_API_KEY=tu_api_key
-TELNYX_PUBLIC_KEY=tu_public_key
+# Twilio
+TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_AUTH_TOKEN=your_auth_token
+TWILIO_PHONE_NUMBER=+1XXXXXXXXXX
 
 # ElevenLabs
-ELEVENLABS_API_KEY=tu_api_key
-ELEVENLABS_AGENT_ID=tu_agent_id
+ELEVENLABS_API_KEY=sk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+ELEVENLABS_AGENT_ID=agent_xxxxxxxxxxxxxxxxxxxxxxx
+
+# Wolkvox
+WOLKVOX_SERVER=0048
+WOLKVOX_TOKEN=your_wolkvox_token
+WOLKVOX_POLLING_INTERVAL=5000
+WOLKVOX_DEFAULT_SKILL_ID=
+WOLKVOX_MAX_CALL_DURATION=300000
+
+# Wolkvox SIP
+WOLKVOX_SIP_USERNAME=inb-unity-elevenlabs
+WOLKVOX_SIP_PASSWORD=your_password
+WOLKVOX_SIP_HOST=XX.XX.XX.XX
+WOLKVOX_SIP_TRANSPORT=udp
 
 # Server
 PORT=3000
@@ -73,18 +110,32 @@ npm start
 
 ## Endpoints
 
+### HTTP Endpoints
+
 | Endpoint | Método | Descripción |
 |----------|--------|-------------|
 | `/health` | GET | Health check |
 | `/ready` | GET | Readiness check |
-| `/telnyx/voice` | POST | Webhook para eventos de voz Telnyx |
-| `/stream` | WS | WebSocket para streaming de audio |
+| `/twilio/voice` | POST | Webhook para llamadas entrantes Twilio |
+| `/twilio/status` | POST | Status callbacks de Twilio |
+| `/api/wolkvox/status` | GET | Estado del orchestrator y Wolkvox |
+| `/api/wolkvox/active-calls` | GET | Llamadas activas |
+| `/api/wolkvox/agents` | GET | Estado de agentes Wolkvox |
+| `/api/wolkvox/transfer` | POST | Forzar transfer manual |
 
-## Configuración de Telnyx
+### WebSocket
 
-1. Crear una TeXML Application en Telnyx
-2. Configurar el Voice Webhook URL: `https://tu-dominio.com/telnyx/voice`
-3. Asignar un número de teléfono a la aplicación
+| Endpoint | Protocolo | Descripción |
+|----------|-----------|-------------|
+| `/stream` | WS | Streaming de audio bidireccional Twilio |
+
+## Configuración de Twilio
+
+1. Ir a Twilio Console → Phone Numbers
+2. Seleccionar el número `+1 754 273 9829`
+3. Configurar **Voice & Fax**:
+   - **A CALL COMES IN**: `https://tu-dominio.ondigitalocean.app/twilio/voice` (POST)
+   - **CALL STATUS CHANGES**: `https://tu-dominio.ondigitalocean.app/twilio/status` (POST)
 
 ## Configuración de ElevenLabs Agent
 

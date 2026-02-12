@@ -1,0 +1,26 @@
+<svg width="154" height="32" viewBox="0 0 154 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Unity Icon - U shape with connected elements -->
+<path d="M0 8.42105C0 3.77023 3.77023 0 8.42105 0H23.5789C28.2298 0 32 3.77023 32 8.42105V23.5789C32 28.2298 28.2298 32 23.5789 32H8.42105C3.77023 32 0 28.2298 0 23.5789V8.42105Z" fill="#512783"/>
+<g filter="url(#filter0_d_unity)">
+<!-- U shape representing Unity -->
+<path d="M8.5 8C8.5 7.17157 9.17157 6.5 10 6.5H12C12.8284 6.5 13.5 7.17157 13.5 8V21C13.5 22.6569 14.8431 24 16.5 24C18.1569 24 19.5 22.6569 19.5 21V8C19.5 7.17157 20.1716 6.5 21 6.5H23C23.8284 6.5 24.5 7.17157 24.5 8V21C24.5 25.4183 20.9183 29 16.5 29C12.0817 29 8.5 25.4183 8.5 21V8Z" fill="white"/>
+</g>
+<!-- Text: Unity -->
+<path d="M44 19.5V7.3H47.1V19.2C47.1 21.8 48.4 23.2 50.8 23.2C53.2 23.2 54.5 21.8 54.5 19.2V7.3H57.6V19.5C57.6 23.7 54.9 26 50.8 26C46.7 26 44 23.7 44 19.5Z" fill="#101828"/>
+<path d="M62.2 25.7V12.9H65.1L65.3 14.5C66.1 13.4 67.5 12.6 69.2 12.6C72.1 12.6 73.7 14.4 73.7 17.5V25.7H70.8V18C70.8 16.2 69.8 15.2 68.2 15.2C66.4 15.2 65.1 16.5 65.1 18.4V25.7H62.2Z" fill="#101828"/>
+<path d="M78.4 10.6C77.4 10.6 76.6 9.8 76.6 8.8C76.6 7.9 77.4 7.1 78.4 7.1C79.4 7.1 80.2 7.9 80.2 8.8C80.2 9.8 79.4 10.6 78.4 10.6ZM76.9 25.7V12.9H79.8V25.7H76.9Z" fill="#101828"/>
+<path d="M85.5 25.7V15.3H82.8V12.9H85.5V11.3C85.5 8.6 87.2 7 90.1 7V9.4C88.7 9.4 88.4 10.1 88.4 11.3V12.9H91.1V15.3H88.4V25.7H85.5Z" fill="#101828"/>
+<path d="M92.8 32V29.6H93.9C95.1 29.6 95.7 29.1 96.2 27.7L96.5 26.9L91 12.9H94.2L97.8 23.2L101.3 12.9H104.4L98.5 28.4C97.5 31 96.2 32 93.9 32H92.8Z" fill="#101828"/>
+<defs>
+<filter id="filter0_d_unity" x="7.5" y="6" width="18" height="24.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="0.5"/>
+<feGaussianBlur stdDeviation="0.5"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+</defs>
+</svg>
