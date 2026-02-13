@@ -8,6 +8,7 @@ import {
   handleGuardarContexto,
   handleCrearSiniestro,
 } from './elevenlabs-webhooks';
+import { handlePostCallWebhook } from './elevenlabs-post-call-webhook';
 import {
   getWolkvoxStatus,
   getActiveCalls,
@@ -96,6 +97,9 @@ export function createHttpServer(): Application {
 
   // Crear siniestro (FUTURO)
   app.post('/api/elevenlabs/crear-siniestro', handleCrearSiniestro);
+
+  // Post-call webhook from ElevenLabs
+  app.post('/api/elevenlabs/post-call-webhook', handlePostCallWebhook);
 
   // ========================================
   // Wolkvox Control Endpoints
