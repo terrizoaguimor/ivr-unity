@@ -253,6 +253,14 @@ Recuerda: eres la primera impresión de Unity Financial. Sé eficiente pero nunc
           this.callLogger.debug('Agent initialized successfully');
           break;
 
+        case 'conversation_initiation_metadata':
+          this.callLogger.info('Conversation metadata received', {
+            conversationId: (message as any).conversation_initiation_metadata_event?.conversation_id,
+            outputFormat: (message as any).conversation_initiation_metadata_event?.agent_output_audio_format,
+            inputFormat: (message as any).conversation_initiation_metadata_event?.user_input_audio_format
+          });
+          break;
+
         default:
           this.callLogger.warn('Unknown message type from ElevenLabs', {
             type: message.type,
