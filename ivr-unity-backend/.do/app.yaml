@@ -73,6 +73,9 @@ services:
       - key: WOLKVOX_MAX_CALL_DURATION
         scope: RUN_TIME
         value: "300000"
+      - key: WOLKVOX_BOT_AGENT_ID
+        scope: RUN_TIME
+        value: "12460"
       # Wolkvox SIP Configuration
       - key: WOLKVOX_SIP_USERNAME
         scope: RUN_TIME
