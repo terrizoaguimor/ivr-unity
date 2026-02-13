@@ -48,7 +48,7 @@ export async function handleSaveContext(
 
         await wolkvoxClient.logInteraction({
           callId: payload.conversation_id,
-          agentId: 'elevenlabs_pre_transfer',
+          agentId: process.env.WOLKVOX_BOT_AGENT_ID || '', // ID numérico del agente virtual
           phoneNumber: payload.caller_phone,
           transcript: payload.summary,
           summary: summary,

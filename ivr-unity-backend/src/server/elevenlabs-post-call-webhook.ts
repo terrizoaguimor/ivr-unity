@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { logger } from '../utils/logger';
 import { WolkvoxClient } from '../wolkvox/wolkvox-client';
+import { ElevenLabsConversationClient } from '../elevenlabs/conversation-client';
 
 /**
  * ElevenLabs Post-Call Webhook Payload
@@ -74,27 +75,80 @@ export async function handlePostCallWebhook(
 
     summary += `\nConversación:\n${transcriptText}`;
 
-    // Log interaction to Wolkvox
-    if (process.env.WOLKVOX_SERVER && process.env.WOLKVOX_TOKEN) {
+    // Log interaction to Wolkvox con audio completo
+    if (process.env.WOLKVOX_SERVER && process.env.WOLKVOX_TOKEN && process.env.ELEVENLABS_API_KEY) {
       try {
         const wolkvoxClient = new WolkvoxClient({
           server: process.env.WOLKVOX_SERVER,
           token: process.env.WOLKVOX_TOKEN,
         });
 
+        const elevenLabsClient = new ElevenLabsConversationClient({
+          apiKey: process.env.ELEVENLABS_API_KEY,
+        });
+
+        // Paso 1: Obtener conversación completa de ElevenLabs
+        logger.info('Fetching complete conversation from ElevenLabs', {
+          conversationId: payload.conversation_id,
+        });
+
+        const conversation = await elevenLabsClient.getConversation(payload.conversation_id);
+        const formattedTranscript = await elevenLabsClient.getFormattedTranscript(payload.conversation_id);
+
+        // Paso 2: Descargar audio si está disponible
+        let audioFileName: string | undefined;
+
+        if (conversation.has_audio) {
+          try {
+            logger.info('Downloading conversation audio from ElevenLabs', {
+              conversationId: payload.conversation_id,
+            });
+
+            const audioBuffer = await elevenLabsClient.getConversationAudio(payload.conversation_id);
+            audioFileName = `elevenlabs_${payload.conversation_id}.mp3`;
+
+            // Paso 3: Subir audio a Wolkvox
+            logger.info('Uploading audio to Wolkvox', {
+              conversationId: payload.conversation_id,
+              fileName: audioFileName,
+              sizeBytes: audioBuffer.length,
+            });
+
+            await wolkvoxClient.uploadAudio(audioBuffer, audioFileName);
+
+            logger.info('Audio uploaded successfully to Wolkvox', {
+              conversationId: payload.conversation_id,
+              fileName: audioFileName,
+            });
+          } catch (audioError) {
+            logger.warn('Failed to download/upload audio, continuing without it', {
+              conversationId: payload.conversation_id,
+              error: audioError instanceof Error ? audioError.message : String(audioError),
+            });
+            audioFileName = undefined;
+          }
+        } else {
+          logger.info('No audio available for this conversation', {
+            conversationId: payload.conversation_id,
+          });
+        }
+
+        // Paso 4: Registrar interacción en Wolkvox con audio adjunto
         await wolkvoxClient.logInteraction({
           callId: payload.conversation_id,
-          agentId: wasTransferred ? 'elevenlabs_transfer' : 'elevenlabs_bot',
+          agentId: process.env.WOLKVOX_BOT_AGENT_ID || '',
           phoneNumber: callerNumber,
-          transcript: transcriptText,
+          transcript: formattedTranscript,
           summary: summary,
           duration: payload.call_duration_ms,
           timestamp: new Date().toISOString(),
         });
 
-        logger.info('Interaction logged to Wolkvox', {
+        logger.info('Complete interaction logged to Wolkvox', {
           conversationId: payload.conversation_id,
           transferred: wasTransferred,
+          hasAudio: !!audioFileName,
+          audioFile: audioFileName,
         });
       } catch (error) {
         logger.error('Failed to log interaction to Wolkvox', {

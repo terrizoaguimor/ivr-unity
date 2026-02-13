@@ -90,16 +90,24 @@ export class WolkvoxClient {
   ): Promise<WolkvoxAPIResponse<T>> {
     const url = new URL(`${this.baseUrl}/${resource}.php`);
 
-    // Agregar parámetros de query
-    Object.entries(params).forEach(([key, value]) => {
-      url.searchParams.append(key, value);
-    });
-
     const headers: Record<string, string> = {
       'wolkvox-token': this.token,
       'wolkvox_server': this.server,
       'Content-Type': 'application/json',
     };
+
+    // Configurar body según el método
+    let body: string | undefined;
+
+    if (method === 'GET') {
+      // GET: parámetros en query string
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.append(key, value);
+      });
+    } else {
+      // POST: parámetros en body JSON
+      body = JSON.stringify(params);
+    }
 
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
@@ -110,11 +118,13 @@ export class WolkvoxClient {
           url: url.toString(),
           method,
           attempt: attempt + 1,
+          bodySize: body?.length || 0,
         });
 
         const response = await fetch(url.toString(), {
           method,
           headers,
+          body,
           signal: controller.signal,
         });
 
@@ -384,6 +394,182 @@ export class WolkvoxClient {
         error: error instanceof Error ? error.message : String(error),
       });
       return false;
+    }
+  }
+
+  /**
+   * Crear agente virtual programáticamente
+   */
+  async createAgent(data: {
+    agentName: string;
+    agentUser: string;
+    agentPass?: string;
+  }): Promise<{ agentId: string }> {
+    logger.info('Creating virtual agent in Wolkvox', {
+      agentName: data.agentName,
+      agentUser: data.agentUser,
+    });
+
+    try {
+      // Para Wolkvox, el parámetro 'api' va en query string
+      // y el resto de parámetros van en el body JSON para POST
+      const url = new URL(`${this.baseUrl}/configuration.php`);
+      url.searchParams.append('api', 'create_agent');
+
+      const body = {
+        agent_name: data.agentName,
+        agent_user: data.agentUser,
+        agent_pass: data.agentPass || '',
+      };
+
+      const response = await fetch(url.toString(), {
+        method: 'POST',
+        headers: {
+          'wolkvox-token': this.token,
+          'wolkvox_server': this.server,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+
+      const result = await response.json() as WolkvoxAPIResponse<any>;
+
+      if (result.code === '200') {
+        const agentId = result.data?.agent_id || result.data;
+
+        logger.info('Virtual agent created successfully', {
+          agentId,
+          agentName: data.agentName,
+        });
+
+        return { agentId };
+      } else {
+        throw new Error(`Wolkvox error: ${result.error || result.msg}`);
+      }
+    } catch (error) {
+      logger.error('Failed to create virtual agent', {
+        agentName: data.agentName,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * Subir archivo de audio a Wolkvox (max 5MB)
+   */
+  async uploadAudio(
+    audioBuffer: Buffer,
+    fileName: string
+  ): Promise<{ success: boolean; fileName: string }> {
+    logger.info('Uploading audio to Wolkvox', {
+      fileName,
+      sizeBytes: audioBuffer.length,
+      sizeMB: (audioBuffer.length / 1024 / 1024).toFixed(2),
+    });
+
+    // Verificar tamaño
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (audioBuffer.length > maxSize) {
+      throw new Error(`Audio file too large: ${(audioBuffer.length / 1024 / 1024).toFixed(2)}MB (max 5MB)`);
+    }
+
+    try {
+      // Crear FormData para upload
+      const FormData = require('form-data');
+      const formData = new FormData();
+      formData.append('file1', audioBuffer, {
+        filename: fileName,
+        contentType: 'audio/mpeg',
+      });
+
+      const url = `${this.baseUrl}/configuration.php?api=upload_audio`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'wolkvox-token': this.token,
+          'wolkvox_server': this.server,
+          ...formData.getHeaders(),
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json() as WolkvoxAPIResponse<any>;
+
+      if (data.code === '200') {
+        logger.info('Audio uploaded successfully', {
+          fileName,
+        });
+        return { success: true, fileName };
+      } else {
+        throw new Error(`Wolkvox upload error: ${data.error || data.msg}`);
+      }
+    } catch (error) {
+      logger.error('Failed to upload audio', {
+        fileName,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * Agregar interacción con audio adjunto
+   */
+  async addInteractionWithAudio(data: {
+    callId: string;
+    agentId: string;
+    phoneNumber: string;
+    transcript: string;
+    summary: string;
+    duration: number;
+    timestamp: string;
+    audioFileName?: string;
+  }): Promise<void> {
+    logger.info('Adding interaction with audio to Wolkvox', {
+      callId: data.callId,
+      phoneNumber: data.phoneNumber,
+      hasAudio: !!data.audioFileName,
+    });
+
+    try {
+      const params: Record<string, string> = {
+        api: 'add_interaction',
+        call_id: data.callId,
+        agent_id: data.agentId,
+        phone: data.phoneNumber,
+        transcript: data.transcript,
+        summary: data.summary,
+        duration: data.duration.toString(),
+        timestamp: data.timestamp,
+      };
+
+      // Si hay audio, agregarlo
+      if (data.audioFileName) {
+        params.audio_file = data.audioFileName;
+      }
+
+      await this.request('configuration', params, 'POST');
+
+      logger.info('Interaction with audio added successfully', {
+        callId: data.callId,
+      });
+    } catch (error) {
+      logger.error('Failed to add interaction with audio', {
+        callId: data.callId,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      // No throw - logging es best-effort
     }
   }
 }
