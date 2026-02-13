@@ -83,9 +83,9 @@ export async function handlePostCallWebhook(
         });
 
         await wolkvoxClient.logInteraction({
-          call_id: payload.conversation_id,
-          agent_id: wasTransferred ? 'elevenlabs_transfer' : 'elevenlabs_bot',
-          phone: callerNumber,
+          callId: payload.conversation_id,
+          agentId: wasTransferred ? 'elevenlabs_transfer' : 'elevenlabs_bot',
+          phoneNumber: callerNumber,
           transcript: transcriptText,
           summary: summary,
           duration: payload.call_duration_ms,
