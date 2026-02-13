@@ -53,6 +53,10 @@ services:
         scope: RUN_TIME
         type: SECRET
         value: agent_4801kg64ffw3f4q8vdytf5j7yz85
+      - key: ELEVENLABS_WEBHOOK_SECRET
+        scope: RUN_TIME
+        type: SECRET
+        value: ${ELEVENLABS_WEBHOOK_SECRET}
       # Wolkvox Configuration
       - key: WOLKVOX_SERVER
         scope: RUN_TIME

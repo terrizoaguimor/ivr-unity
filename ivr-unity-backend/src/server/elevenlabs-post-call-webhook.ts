@@ -1,7 +1,44 @@
 import { Request, Response } from 'express';
+import { createHmac } from 'crypto';
 import { logger } from '../utils/logger';
 import { WolkvoxClient } from '../wolkvox/wolkvox-client';
 import { ElevenLabsConversationClient } from '../elevenlabs/conversation-client';
+
+/**
+ * Verify ElevenLabs webhook signature
+ */
+function verifyWebhookSignature(
+  payload: string,
+  signature: string | undefined,
+  secret: string
+): boolean {
+  if (!signature) {
+    logger.warn('No webhook signature provided');
+    return false;
+  }
+
+  try {
+    const expectedSignature = createHmac('sha256', secret)
+      .update(payload)
+      .digest('hex');
+
+    // Compare signatures (constant-time comparison to prevent timing attacks)
+    const signatureBuffer = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expectedSignature);
+
+    if (signatureBuffer.length !== expectedBuffer.length) {
+      return false;
+    }
+
+    return createHmac('sha256', secret)
+      .update(signatureBuffer)
+      .digest()
+      .equals(createHmac('sha256', secret).update(expectedBuffer).digest());
+  } catch (error) {
+    logger.error('Error verifying webhook signature', { error });
+    return false;
+  }
+}
 
 /**
  * ElevenLabs Post-Call Webhook Payload
@@ -37,6 +74,29 @@ export async function handlePostCallWebhook(
   res: Response
 ): Promise<void> {
   try {
+    // Verify webhook signature if secret is configured
+    if (process.env.ELEVENLABS_WEBHOOK_SECRET) {
+      const signature = req.headers['x-elevenlabs-signature'] as string | undefined;
+      const rawBody = JSON.stringify(req.body);
+
+      const isValid = verifyWebhookSignature(
+        rawBody,
+        signature,
+        process.env.ELEVENLABS_WEBHOOK_SECRET
+      );
+
+      if (!isValid) {
+        logger.warn('Invalid webhook signature', {
+          signature,
+          headers: req.headers,
+        });
+        res.status(401).json({ error: 'Invalid signature' });
+        return;
+      }
+
+      logger.info('Webhook signature verified successfully');
+    }
+
     const payload: ElevenLabsPostCallPayload = req.body;
 
     logger.info('ElevenLabs post-call webhook received', {
