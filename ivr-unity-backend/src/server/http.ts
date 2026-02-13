@@ -9,6 +9,7 @@ import {
   handleCrearSiniestro,
 } from './elevenlabs-webhooks';
 import { handlePostCallWebhook } from './elevenlabs-post-call-webhook';
+import { handleSaveContext } from './elevenlabs-save-context';
 import {
   getWolkvoxStatus,
   getActiveCalls,
@@ -100,6 +101,9 @@ export function createHttpServer(): Application {
 
   // Post-call webhook from ElevenLabs
   app.post('/api/elevenlabs/post-call-webhook', handlePostCallWebhook);
+
+  // Save context before transfer (Client Tool)
+  app.post('/api/elevenlabs/save-context', handleSaveContext);
 
   // ========================================
   // Wolkvox Control Endpoints
