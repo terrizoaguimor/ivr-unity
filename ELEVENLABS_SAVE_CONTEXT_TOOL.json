@@ -1,0 +1,39 @@
+{
+  "type": "client",
+  "name": "save_context",
+  "description": "Save conversation context to Wolkvox system before transferring the call. This ensures the human agent has full context of what was discussed with the bot.",
+  "params": {
+    "url": "https://ivr-unity-a6zp5.ondigitalocean.app/api/elevenlabs/save-context",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "caller_phone": {
+          "type": "string",
+          "description": "Caller's phone number (10 digits)"
+        },
+        "caller_name": {
+          "type": "string",
+          "description": "Caller's name if provided"
+        },
+        "issue_type": {
+          "type": "string",
+          "enum": ["AUTO_ACCIDENT", "HOME_DAMAGE", "GENERAL_INQUIRY"],
+          "description": "Type of issue: AUTO_ACCIDENT for car accidents, HOME_DAMAGE for home/property issues, GENERAL_INQUIRY for other inquiries"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Brief summary of the conversation including key details like: what happened, when it happened, severity, if emergency services were called, etc."
+        },
+        "conversation_id": {
+          "type": "string",
+          "description": "Conversation ID from the system"
+        }
+      },
+      "required": ["caller_phone", "issue_type", "summary", "conversation_id"]
+    }
+  }
+}
