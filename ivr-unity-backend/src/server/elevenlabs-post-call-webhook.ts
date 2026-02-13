@@ -6,34 +6,39 @@ import { ElevenLabsConversationClient } from '../elevenlabs/conversation-client'
 
 /**
  * Verify ElevenLabs webhook signature
+ * Format: "t=timestamp,v0=signature_hash"
  */
 function verifyWebhookSignature(
   payload: string,
-  signature: string | undefined,
+  signatureHeader: string | undefined,
   secret: string
 ): boolean {
-  if (!signature) {
+  if (!signatureHeader) {
     logger.warn('No webhook signature provided');
     return false;
   }
 
   try {
-    const expectedSignature = createHmac('sha256', secret)
-      .update(payload)
-      .digest('hex');
+    // Parse ElevenLabs signature format: "t=timestamp,v0=hash"
+    const parts = signatureHeader.split(',');
+    const timestamp = parts.find(p => p.startsWith('t='))?.split('=')[1];
+    const signature = parts.find(p => p.startsWith('v0='))?.split('=')[1];
 
-    // Compare signatures (constant-time comparison to prevent timing attacks)
-    const signatureBuffer = Buffer.from(signature);
-    const expectedBuffer = Buffer.from(expectedSignature);
-
-    if (signatureBuffer.length !== expectedBuffer.length) {
+    if (!timestamp || !signature) {
+      logger.warn('Invalid signature format', { signatureHeader });
       return false;
     }
 
-    return createHmac('sha256', secret)
-      .update(signatureBuffer)
-      .digest()
-      .equals(createHmac('sha256', secret).update(expectedBuffer).digest());
+    // Build signed payload: timestamp.raw_body
+    const signedPayload = `${timestamp}.${payload}`;
+
+    // Compute expected signature
+    const expectedSignature = createHmac('sha256', secret)
+      .update(signedPayload)
+      .digest('hex');
+
+    // Constant-time comparison
+    return signature === expectedSignature;
   } catch (error) {
     logger.error('Error verifying webhook signature', { error });
     return false;
@@ -76,7 +81,7 @@ export async function handlePostCallWebhook(
   try {
     // Verify webhook signature if secret is configured
     if (process.env.ELEVENLABS_WEBHOOK_SECRET) {
-      const signature = req.headers['x-elevenlabs-signature'] as string | undefined;
+      const signature = req.headers['elevenlabs-signature'] as string | undefined;
       const rawBody = JSON.stringify(req.body);
 
       const isValid = verifyWebhookSignature(
