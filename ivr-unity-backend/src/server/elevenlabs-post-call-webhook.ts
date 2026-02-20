@@ -82,7 +82,7 @@ export async function handlePostCallWebhook(
     // Verify webhook signature if secret is configured
     if (process.env.ELEVENLABS_WEBHOOK_SECRET) {
       const signature = req.headers['elevenlabs-signature'] as string | undefined;
-      const rawBody = JSON.stringify(req.body);
+      const rawBody = (req as any).rawBody || JSON.stringify(req.body);
 
       const isValid = verifyWebhookSignature(
         rawBody,

@@ -26,9 +26,15 @@ import {
 export function createHttpServer(): Application {
   const app = express();
 
-  // Middleware
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+  // Middleware - Increase limit for ElevenLabs webhook payloads
+  app.use(express.json({
+    limit: '5mb',
+    verify: (req: any, _res, buf) => {
+      // Store raw body for webhook signature verification
+      req.rawBody = buf.toString();
+    },
+  }));
+  app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
   // Request logging
   app.use((req: Request, res: Response, next: NextFunction) => {
